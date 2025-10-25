@@ -360,61 +360,73 @@
         /* تخصيص أعمدة الجدول */
         .user-table th:nth-child(1),
         .user-table td:nth-child(1) {
-            width: 60px; /* التحديد */
+            width: 60px; /* الترتيب (الأسهم) */
             text-align: center;
         }
         
         .user-table th:nth-child(2),
         .user-table td:nth-child(2) {
-            width: 60px; /* الترتيب */
+            width: 60px; /* التحديد */
             text-align: center;
         }
         
         .user-table th:nth-child(3),
         .user-table td:nth-child(3) {
-            width: 200px; /* الاسم */
+            width: 60px; /* الرقم (الترتيب) */
+            text-align: center;
         }
         
         .user-table th:nth-child(4),
         .user-table td:nth-child(4) {
-            width: 150px; /* الوظيفة/القسم */
+            width: 200px; /* الاسم */
         }
         
         .user-table th:nth-child(5),
         .user-table td:nth-child(5) {
-            width: 120px; /* رقم الهاتف */
+            width: 150px; /* الوظيفة */
         }
         
         .user-table th:nth-child(6),
         .user-table td:nth-child(6) {
+            width: 120px; /* الهاتف */
+        }
+        
+        .user-table th:nth-child(7),
+        .user-table td:nth-child(7) {
             width: 200px; /* الإجراءات */
         }
 
         /* جدول المعلمات بدون رقم الهاتف */
         .teachers-table th:nth-child(1),
         .teachers-table td:nth-child(1) {
-            width: 60px; /* التحديد */
+            width: 60px; /* الترتيب (الأسهم) */
             text-align: center;
         }
         
         .teachers-table th:nth-child(2),
         .teachers-table td:nth-child(2) {
-            width: 60px; /* الترتيب */
+            width: 60px; /* التحديد */
             text-align: center;
         }
         
         .teachers-table th:nth-child(3),
         .teachers-table td:nth-child(3) {
-            width: 200px; /* الاسم */
+            width: 60px; /* الرقم (الترتيب) */
+            text-align: center;
         }
         
         .teachers-table th:nth-child(4),
         .teachers-table td:nth-child(4) {
-            width: 150px; /* القسم/المادة */
+            width: 200px; /* الاسم */
         }
         
         .teachers-table th:nth-child(5),
         .teachers-table td:nth-child(5) {
+            width: 150px; /* القسم/المادة */
+        }
+        
+        .teachers-table th:nth-child(6),
+        .teachers-table td:nth-child(6) {
             width: 200px; /* الإجراءات */
         }
 
@@ -789,26 +801,31 @@
             
             .user-table th:nth-child(2),
             .user-table td:nth-child(2) {
-                width: 60px;
+                width: 40px;
             }
             
             .user-table th:nth-child(3),
             .user-table td:nth-child(3) {
-                width: 120px;
+                width: 40px;
             }
             
             .user-table th:nth-child(4),
             .user-table td:nth-child(4) {
-                width: 100px;
+                width: 120px;
             }
             
             .user-table th:nth-child(5),
             .user-table td:nth-child(5) {
-                width: 90px;
+                width: 100px;
             }
             
             .user-table th:nth-child(6),
             .user-table td:nth-child(6) {
+                width: 90px;
+            }
+            
+            .user-table th:nth-child(7),
+            .user-table td:nth-child(7) {
                 width: 200px;
             }
             
@@ -932,7 +949,6 @@
                         <!-- علامات التبويب الفرعية -->
                         <ul class="user-sub-tabs" id="userSubTabs">
                             <li><a href="#" data-user-section="senior_leadership" class="active">القيادة العليا</a></li>
-                            <li><a href="#" data-user-section="middle_leadership">القيادة الوسطى</a></li>
                             <li><a href="#" data-user-section="middle_leadership_1">القيادة الوسطى ١</a></li>
                             <li><a href="#" data-user-section="teacher">المعلمات</a></li>
                             <li><a href="#" data-user-section="departments">أقسام المواد</a></li>
@@ -963,11 +979,12 @@
                             <table class="user-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllSeniorHeader"></th>
                                         <th>الترتيب</th>
-                                        <th>الاسم</th>
+                                        <th><input type="checkbox" id="selectAllSeniorHeader"></th>
+                                        <th>#</th>
+                                        <th>الأسم</th>
                                         <th>الوظيفة</th>
-                                        <th>الهاتف</th>
+                                        <th>رقم الهاتف</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -981,52 +998,6 @@
                                 <h3>لا توجد بيانات</h3>
                                 <p>لم يتم إضافة أي مستخدمين في القيادة العليا بعد</p>
                                 <button class="btn" id="addSeniorLeadershipEmpty">إضافة اسم جديد</button>
-                            </div>
-                        </div>
-                        
-                        <!-- قسم القيادة الوسطى -->
-                        <div id="middle_leadership" class="user-management-section">
-                            <div class="user-management-header">
-                                <h3 class="user-management-title">إدارة القيادة الوسطى</h3>
-                                <div class="user-management-actions">
-                                    <button class="btn" id="addMiddleLeadership">إضافة اسم جديد</button>
-                                    <button class="btn btn-secondary" id="exportMiddleLeadership">تصدير CSV</button>
-                                    <button class="btn btn-secondary" id="importMiddleLeadership">استيراد CSV</button>
-                                    <input type="file" id="middleLeadershipFile" accept=".csv" style="display: none;">
-                                </div>
-                            </div>
-                            
-                            <div class="table-header-actions">
-                                <div class="bulk-actions">
-                                    <button class="btn btn-sm btn-danger" id="deleteSelectedMiddle">حذف المحددين</button>
-                                    <button class="btn btn-sm btn-warning" id="toggleSelectedMiddle">تفعيل/إلغاء المحددين</button>
-                                    <label class="select-all-checkbox">
-                                        <input type="checkbox" id="selectAllMiddle"> تحديد الكل
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <table class="user-table">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAllMiddleHeader"></th>
-                                        <th>الترتيب</th>
-                                        <th>الاسم</th>
-                                        <th>الوظيفة</th>
-                                        <th>الهاتف</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="middleLeadershipTable">
-                                    <!-- سيتم ملؤها بالبيانات -->
-                                </tbody>
-                            </table>
-                            
-                            <div id="middleLeadershipEmpty" class="empty-state" style="display: none;">
-                                <i class="fas fa-users"></i>
-                                <h3>لا توجد بيانات</h3>
-                                <p>لم يتم إضافة أي مستخدمين في القيادة الوسطى بعد</p>
-                                <button class="btn" id="addMiddleLeadershipEmpty">إضافة اسم جديد</button>
                             </div>
                         </div>
                         
@@ -1055,11 +1026,12 @@
                             <table class="user-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllMiddle1Header"></th>
                                         <th>الترتيب</th>
-                                        <th>الاسم</th>
+                                        <th><input type="checkbox" id="selectAllMiddle1Header"></th>
+                                        <th>#</th>
+                                        <th>الأسم</th>
                                         <th>الوظيفة</th>
-                                        <th>الهاتف</th>
+                                        <th>رقم الهاتف</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -1101,9 +1073,10 @@
                             <table class="user-table teachers-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllTeachersHeader"></th>
                                         <th>الترتيب</th>
-                                        <th>الاسم</th>
+                                        <th><input type="checkbox" id="selectAllTeachersHeader"></th>
+                                        <th>#</th>
+                                        <th>الأسم</th>
                                         <th>القسم/المادة</th>
                                         <th>الإجراءات</th>
                                     </tr>
@@ -1324,7 +1297,6 @@
                     systemLogs: { view: true, edit: true },
                     departments: {
                         'القيادة العليا': { view: true, edit: true },
-                        'القيادة الوسطى': { view: true, edit: true },
                         'القيادة الوسطى ١': { view: true, edit: true }
                     }
                 }
@@ -1352,7 +1324,6 @@
                         systemLogs: { view: true, edit: true },
                         departments: {
                             'القيادة العليا': { view: true, edit: true },
-                            'القيادة الوسطى': { view: true, edit: true },
                             'القيادة الوسطى ١': { view: true, edit: true }
                         }
                     }
@@ -1576,10 +1547,6 @@
                 showAddUserModal('senior_leadership');
             });
             
-            document.getElementById('addMiddleLeadership').addEventListener('click', function() {
-                showAddUserModal('middle_leadership');
-            });
-            
             document.getElementById('addMiddleLeadership1').addEventListener('click', function() {
                 showAddUserModal('middle_leadership_1');
             });
@@ -1591,10 +1558,6 @@
             // إعداد أزرار إضافة المستخدمين من الحالات الفارغة
             document.getElementById('addSeniorLeadershipEmpty').addEventListener('click', function() {
                 showAddUserModal('senior_leadership');
-            });
-            
-            document.getElementById('addMiddleLeadershipEmpty').addEventListener('click', function() {
-                showAddUserModal('middle_leadership');
             });
             
             document.getElementById('addMiddleLeadership1Empty').addEventListener('click', function() {
@@ -1614,10 +1577,6 @@
                 exportUsersToCSV('senior_leadership');
             });
             
-            document.getElementById('exportMiddleLeadership').addEventListener('click', function() {
-                exportUsersToCSV('middle_leadership');
-            });
-            
             document.getElementById('exportMiddleLeadership1').addEventListener('click', function() {
                 exportUsersToCSV('middle_leadership_1');
             });
@@ -1631,10 +1590,6 @@
                 document.getElementById('seniorLeadershipFile').click();
             });
             
-            document.getElementById('importMiddleLeadership').addEventListener('click', function() {
-                document.getElementById('middleLeadershipFile').click();
-            });
-            
             document.getElementById('importMiddleLeadership1').addEventListener('click', function() {
                 document.getElementById('middleLeadership1File').click();
             });
@@ -1645,7 +1600,6 @@
             
             // معالجة اختيار الملفات
             document.getElementById('seniorLeadershipFile').addEventListener('change', handleCSVUpload);
-            document.getElementById('middleLeadershipFile').addEventListener('change', handleCSVUpload);
             document.getElementById('middleLeadership1File').addEventListener('change', handleCSVUpload);
             document.getElementById('teachersFile').addEventListener('change', handleCSVUpload);
             
@@ -1778,20 +1732,6 @@
                 toggleSelectAll('senior_leadership', this.checked);
             });
             
-            // القيادة الوسطى
-            document.getElementById('deleteSelectedMiddle').addEventListener('click', function() {
-                deleteSelectedUsers('middle_leadership');
-            });
-            document.getElementById('toggleSelectedMiddle').addEventListener('click', function() {
-                toggleSelectedUsers('middle_leadership');
-            });
-            document.getElementById('selectAllMiddle').addEventListener('change', function() {
-                toggleSelectAll('middle_leadership', this.checked);
-            });
-            document.getElementById('selectAllMiddleHeader').addEventListener('change', function() {
-                toggleSelectAll('middle_leadership', this.checked);
-            });
-            
             // القيادة الوسطى ١
             document.getElementById('deleteSelectedMiddle1').addEventListener('click', function() {
                 deleteSelectedUsers('middle_leadership_1');
@@ -1838,7 +1778,6 @@
         // عرض جداول المستخدمين
         function renderUserTables() {
             renderSeniorLeadershipTable();
-            renderMiddleLeadershipTable();
             renderMiddleLeadership1Table();
             renderTeachersTable();
         }
@@ -1865,14 +1804,14 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>
                         <div class="order-controls">
                             <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <span>${index + 1}</span>
                             <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
+                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
+                    <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.position || ''}</td>
                     <td>${user.phone || ''}</td>
@@ -1893,58 +1832,6 @@
             
             // إعداد معالجي الأحداث
             setupUserTableEventHandlers('senior_leadership');
-        }
-
-        // عرض جدول القيادة الوسطى
-        function renderMiddleLeadershipTable() {
-            const table = document.getElementById('middleLeadershipTable');
-            const emptyState = document.getElementById('middleLeadershipEmpty');
-            
-            const middleUsers = appData.users.filter(user => user.role === 'middle_leadership');
-            
-            if (middleUsers.length === 0) {
-                table.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            emptyState.style.display = 'none';
-            table.innerHTML = '';
-            
-            // ترتيب المستخدمين حسب الترتيب المخصص
-            const sortedUsers = [...middleUsers].sort((a, b) => (a.order || 0) - (b.order || 0));
-            
-            sortedUsers.forEach((user, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
-                    <td>
-                        <div class="order-controls">
-                            <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <span>${index + 1}</span>
-                            <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
-                        </div>
-                    </td>
-                    <td>${user.name}</td>
-                    <td>${user.position || ''}</td>
-                    <td>${user.phone || ''}</td>
-                    <td>
-                        <div class="user-actions">
-                            <button class="btn btn-xs btn-warning preview-user" data-id="${user.id}">معاينة</button>
-                            <button class="btn btn-xs btn-secondary edit-user" data-id="${user.id}">تعديل</button>
-                            <button class="btn btn-xs btn-danger delete-user" data-id="${user.id}">حذف</button>
-                            <button class="btn btn-xs ${user.active ? 'btn-warning' : 'btn-success'} toggle-user" data-id="${user.id}">
-                                ${user.active ? 'إلغاء التفعيل' : 'تفعيل'}
-                            </button>
-                            <button class="btn btn-xs btn-primary permissions-user" data-id="${user.id}">الصلاحيات</button>
-                        </div>
-                    </td>
-                `;
-                table.appendChild(row);
-            });
-            
-            // إعداد معالجي الأحداث
-            setupUserTableEventHandlers('middle_leadership');
         }
 
         // عرض جدول القيادة الوسطى ١
@@ -1969,14 +1856,14 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>
                         <div class="order-controls">
                             <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <span>${index + 1}</span>
                             <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
+                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
+                    <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.position || ''}</td>
                     <td>${user.phone || ''}</td>
@@ -2021,14 +1908,14 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>
                         <div class="order-controls">
                             <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <span>${index + 1}</span>
                             <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
+                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
+                    <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.department || ''}</td>
                     <td>
@@ -2756,8 +2643,6 @@
             
             if (fileType === 'seniorLeadershipFile') {
                 userRole = 'senior_leadership';
-            } else if (fileType === 'middleLeadershipFile') {
-                userRole = 'middle_leadership';
             } else if (fileType === 'middleLeadership1File') {
                 userRole = 'middle_leadership_1';
             } else if (fileType === 'teachersFile') {
@@ -2787,7 +2672,7 @@
                         let position = '';
                         let phone = '';
                         
-                        if (userRole === 'senior_leadership' || userRole === 'middle_leadership' || userRole === 'middle_leadership_1') {
+                        if (userRole === 'senior_leadership' || userRole === 'middle_leadership_1') {
                             position = cols[2]?.trim() || 'موظف';
                             phone = cols[3]?.trim() || '';
                         } else if (userRole === 'teacher') {
@@ -2854,9 +2739,6 @@
             if (role === 'senior_leadership') {
                 csvContent = BOM + 'الترتيب,الاسم,الوظيفة,رقم الهاتف\n';
                 fileName = 'قائمة_القيادة_العليا.csv';
-            } else if (role === 'middle_leadership') {
-                csvContent = BOM + 'الترتيب,الاسم,الوظيفة,رقم الهاتف\n';
-                fileName = 'قائمة_القيادة_الوسطى.csv';
             } else if (role === 'middle_leadership_1') {
                 csvContent = BOM + 'الترتيب,الاسم,الوظيفة,رقم الهاتف\n';
                 fileName = 'قائمة_القيادة_الوسطى_١.csv';
@@ -2911,7 +2793,6 @@
                 'supervisor': 'مشرف',
                 'teacher': 'معلم',
                 'senior_leadership': 'القيادة العليا',
-                'middle_leadership': 'القيادة الوسطى',
                 'middle_leadership_1': 'القيادة الوسطى ١'
             };
             return roles[role] || role;
@@ -2947,7 +2828,6 @@
                 systemLogs: { view: false, edit: false },
                 departments: {
                     'القيادة العليا': { view: false, edit: false },
-                    'القيادة الوسطى': { view: false, edit: false },
                     'القيادة الوسطى ١': { view: false, edit: false }
                 }
             };
@@ -2968,11 +2848,11 @@
                 basePermissions.dashboard = { view: true, edit: false };
                 basePermissions.visits = { view: true, edit: true };
                 basePermissions.departments['القيادة العليا'] = { view: true, edit: true };
-            } else if (role === 'middle_leadership' || role === 'middle_leadership_1') {
+            } else if (role === 'middle_leadership_1') {
                 // القيادة الوسطى لديها صلاحيات محدودة
                 basePermissions.dashboard = { view: true, edit: false };
                 basePermissions.visits = { view: true, edit: true };
-                basePermissions.departments[role === 'middle_leadership' ? 'القيادة الوسطى' : 'القيادة الوسطى ١'] = { view: true, edit: true };
+                basePermissions.departments['القيادة الوسطى ١'] = { view: true, edit: true };
             }
             
             return basePermissions;
