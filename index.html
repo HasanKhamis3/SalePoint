@@ -1312,6 +1312,7 @@
                     avatar: 'م',
                     active: true,
                     hasAccess: true,
+                    order: 1,
                     permissions: {
                         dashboard: { view: true, edit: true },
                         middleLeadership: { view: true, edit: true },
@@ -1327,6 +1328,42 @@
                             'القيادة الوسطى ١': { view: true, edit: true }
                         }
                     }
+                },
+                { 
+                    id: 2, 
+                    name: 'علياء محمد مبارك الدوسري', 
+                    position: 'مديرة المدرسة',
+                    role: 'senior_leadership', 
+                    avatar: 'ع',
+                    active: true,
+                    hasAccess: true,
+                    phone: '٢٩٤',
+                    order: 1,
+                    permissions: createDefaultPermissions('senior_leadership')
+                },
+                { 
+                    id: 3, 
+                    name: 'ليل سعيد حسن محمد', 
+                    position: 'مدير مساعد',
+                    role: 'senior_leadership', 
+                    avatar: 'ل',
+                    active: true,
+                    hasAccess: true,
+                    phone: '٣٩٥',
+                    order: 2,
+                    permissions: createDefaultPermissions('senior_leadership')
+                },
+                { 
+                    id: 4, 
+                    name: 'مريم يعقوب يوسف محمد', 
+                    position: 'مدير مساعد',
+                    role: 'senior_leadership', 
+                    avatar: 'م',
+                    active: true,
+                    hasAccess: true,
+                    phone: '٣٩٦',
+                    order: 3,
+                    permissions: createDefaultPermissions('senior_leadership')
                 }
             ],
             departments: [
@@ -1376,6 +1413,10 @@
             // عرض بيانات المستخدم الحالي
             document.getElementById('userName').textContent = appData.currentUser.name;
             document.getElementById('userAvatar').textContent = appData.currentUser.avatar;
+            
+            // عرض البيانات الأولية
+            renderUserTables();
+            renderDepartmentsTable();
         });
 
         // تحميل البيانات من localStorage
@@ -1806,8 +1847,8 @@
                 row.innerHTML = `
                     <td>
                         <div class="order-controls">
-                            <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
+                            <button class="order-btn move-up" data-id="${user.id}" data-role="senior_leadership"><i class="fas fa-chevron-up"></i></button>
+                            <button class="order-btn move-down" data-id="${user.id}" data-role="senior_leadership"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
                     <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
@@ -1858,8 +1899,8 @@
                 row.innerHTML = `
                     <td>
                         <div class="order-controls">
-                            <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
+                            <button class="order-btn move-up" data-id="${user.id}" data-role="middle_leadership_1"><i class="fas fa-chevron-up"></i></button>
+                            <button class="order-btn move-down" data-id="${user.id}" data-role="middle_leadership_1"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
                     <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
@@ -1910,8 +1951,8 @@
                 row.innerHTML = `
                     <td>
                         <div class="order-controls">
-                            <button class="order-btn move-up" data-id="${user.id}"><i class="fas fa-chevron-up"></i></button>
-                            <button class="order-btn move-down" data-id="${user.id}"><i class="fas fa-chevron-down"></i></button>
+                            <button class="order-btn move-up" data-id="${user.id}" data-role="teacher"><i class="fas fa-chevron-up"></i></button>
+                            <button class="order-btn move-down" data-id="${user.id}" data-role="teacher"><i class="fas fa-chevron-down"></i></button>
                         </div>
                     </td>
                     <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
@@ -1984,6 +2025,7 @@
             document.querySelectorAll(`#${role === 'teacher' ? 'teachersTable' : role + 'Table'} .move-up`).forEach(btn => {
                 btn.addEventListener('click', function() {
                     const userId = parseInt(this.getAttribute('data-id'));
+                    const role = this.getAttribute('data-role');
                     moveUserUp(userId, role);
                 });
             });
@@ -1991,6 +2033,7 @@
             document.querySelectorAll(`#${role === 'teacher' ? 'teachersTable' : role + 'Table'} .move-down`).forEach(btn => {
                 btn.addEventListener('click', function() {
                     const userId = parseInt(this.getAttribute('data-id'));
+                    const role = this.getAttribute('data-role');
                     moveUserDown(userId, role);
                 });
             });
