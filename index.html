@@ -92,6 +92,7 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background 0.3s;
+            margin-left: 10px;
         }
         
         .controls button:hover {
@@ -199,7 +200,7 @@
                 <li>أقسام المواد</li>
                 <li>إدارة القيادة العليا</li>
                 <li>حذف المعدون</li>
-                <li>تشغيل/إلقاء المعدون</li>
+                <li>تشغيل/إيقاف المعدون</li>
                 <li>تحديد كرخ</li>
             </ul>
         </div>
@@ -299,6 +300,8 @@
             if (selectedRows.length > 0) {
                 if (confirm(`هل أنت متأكد من حذف ${selectedRows.length} مستخدم؟`)) {
                     alert('تم حذف المستخدمين المحددين بنجاح');
+                    // إعادة تعيين تحديد الكل
+                    document.getElementById('selectAll').checked = false;
                 }
             } else {
                 alert('يرجى تحديد مستخدمين للحذف');
@@ -315,7 +318,12 @@
         });
         
         document.getElementById('preview').addEventListener('click', function() {
-            alert('فتح نافذة المعاينة');
+            const selectedRows = document.querySelectorAll('.row-checkbox:checked');
+            if (selectedRows.length > 0) {
+                alert(`فتح معاينة ${selectedRows.length} مستخدم`);
+            } else {
+                alert('يرجى تحديد مستخدم للمعاينة');
+            }
         });
         
         document.getElementById('addUser').addEventListener('click', function() {
@@ -338,12 +346,34 @@
         }
         
         function deactivateUser() {
-            alert('تم إلغاء تفعيل المستخدم');
+            if (confirm('هل أنت متأكد من إلغاء تفعيل هذا المستخدم؟')) {
+                alert('تم إلغاء تفعيل المستخدم');
+            }
         }
         
         function managePermissions() {
             alert('فتح نافذة إدارة الصلاحيات');
         }
+        
+        // التحقق من حالة تحديد الكل عند تغيير أي صف
+        document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allCheckboxes = document.querySelectorAll('.row-checkbox');
+                const selectAll = document.getElementById('selectAll');
+                const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+                
+                if (checkedCount === 0) {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = false;
+                } else if (checkedCount === allCheckboxes.length) {
+                    selectAll.checked = true;
+                    selectAll.indeterminate = false;
+                } else {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = true;
+                }
+            });
+        });
     </script>
 </body>
 </html>
