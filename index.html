@@ -754,6 +754,71 @@
             color: white;
         }
 
+        /* ترتيب التقرير */
+        .report-order-section {
+            margin-top: 2rem;
+        }
+
+        .report-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .report-order-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .report-order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .report-order-table th, .report-order-table td {
+            padding: 12px 10px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+
+        .report-order-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .report-order-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .report-order-table tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .report-order-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .report-order-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .report-order-btn:hover {
+            color: var(--primary-light);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -839,6 +904,10 @@
             .settings-grid {
                 grid-template-columns: 1fr;
             }
+
+            .report-order-table {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -881,6 +950,7 @@
                     <ul class="user-sub-tabs" id="settingsSubTabs">
                         <li><a href="#" data-settings-section="general_settings" class="active">الإعدادات العامة</a></li>
                         <li><a href="#" data-settings-section="user_management">إدارة المستخدمين</a></li>
+                        <li><a href="#" data-settings-section="report_order">ترتيب التقرير</a></li>
                         <li><a href="#" data-settings-section="system_logs">سجل النظام</a></li>
                     </ul>
                     
@@ -1105,6 +1175,45 @@
                         </div>
                     </div>
                     
+                    <!-- ترتيب التقرير -->
+                    <div id="report_order" class="user-management-section">
+                        <div class="report-order-header">
+                            <h3 class="report-order-title">ترتيب التقرير</h3>
+                            <div class="user-management-actions">
+                                <button class="btn" id="addReportOrder">إضافة قسم جديد</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-header-actions">
+                            <div class="bulk-actions">
+                                <button class="btn btn-sm btn-danger" id="deleteSelectedReportOrder">حذف المحددين</button>
+                                <button class="btn btn-sm btn-warning" id="toggleSelectedReportOrder">تفعيل/إلغاء المحددين</button>
+                            </div>
+                        </div>
+                        
+                        <table class="report-order-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAllReportOrderHeader"></th>
+                                    <th>#</th>
+                                    <th>اسم القسم</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportOrderTable">
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                        
+                        <div id="reportOrderEmpty" class="empty-state" style="display: none;">
+                            <i class="fas fa-sort"></i>
+                            <h3>لا توجد بيانات</h3>
+                            <p>لم يتم إضافة أي أقسام لترتيب التقرير بعد</p>
+                            <button class="btn" id="addReportOrderEmpty">إضافة قسم جديد</button>
+                        </div>
+                    </div>
+                    
                     <!-- سجل النظام -->
                     <div id="system_logs" class="user-management-section">
                         <div class="user-management-header">
@@ -1240,6 +1349,37 @@
         </div>
     </div>
 
+    <!-- Modal for Adding/Editing Report Order -->
+    <div id="reportOrderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="reportOrderModalTitle">إضافة قسم ترتيب التقرير</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="reportOrderForm">
+                <input type="hidden" id="reportOrderId">
+                <div class="form-group">
+                    <label for="reportOrderName">اسم القسم</label>
+                    <select id="reportOrderName" required>
+                        <option value="">اختر اسم القسم</option>
+                        <!-- سيتم ملؤها بالأسماء المتاحة -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reportOrderStatus">الحالة</label>
+                    <select id="reportOrderStatus">
+                        <option value="active">مفعل</option>
+                        <option value="inactive">غير مفعل</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">حفظ</button>
+                    <button type="button" class="btn btn-secondary" id="cancelReportOrder">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // بيانات التطبيق
         const appData = {
@@ -1353,6 +1493,11 @@
                 { id: 4, name: 'العلوم', status: 'active', order: 4 },
                 { id: 5, name: 'التربية الإسلامية', status: 'active', order: 5 }
             ],
+            reportOrder: [
+                { id: 1, name: 'القيادة العليا', status: 'active', order: 1 },
+                { id: 2, name: 'القيادة الوسطى', status: 'active', order: 2 },
+                { id: 3, name: 'المعلمات', status: 'active', order: 3 }
+            ],
             settings: {
                 schoolName: 'مدرسة النموذجية',
                 ministryLogo: '',
@@ -1397,6 +1542,7 @@
             // عرض البيانات الأولية
             renderUserTables();
             renderDepartmentsTable();
+            renderReportOrderTable();
         });
 
         // تحميل البيانات من localStorage
@@ -1489,6 +1635,7 @@
             if (sectionId === 'settings') {
                 renderSettingsSection('general_settings');
                 renderDepartmentsTable();
+                renderReportOrderTable();
                 renderSystemLogs();
                 
                 // عرض جداول المستخدمين
@@ -1530,6 +1677,8 @@
                     // عرض المحتوى المناسب
                     if (sectionId === 'user_management') {
                         renderUserTables();
+                    } else if (sectionId === 'report_order') {
+                        renderReportOrderTable();
                     } else if (sectionId === 'system_logs') {
                         renderSystemLogs();
                     }
@@ -1593,6 +1742,10 @@
                 showAddDepartmentModal();
             });
             
+            document.getElementById('addReportOrderEmpty').addEventListener('click', function() {
+                showAddReportOrderModal();
+            });
+            
             // إعداد أزرار التصدير
             document.getElementById('exportSeniorLeadership').addEventListener('click', function() {
                 exportUsersToCSV('senior_leadership');
@@ -1634,6 +1787,12 @@
             document.getElementById('cancelDepartment').addEventListener('click', closeDepartmentModal);
             document.querySelector('#departmentModal .close-modal').addEventListener('click', closeDepartmentModal);
             document.getElementById('departmentForm').addEventListener('submit', saveDepartment);
+            
+            // إعداد قسم ترتيب التقرير
+            document.getElementById('addReportOrder').addEventListener('click', showAddReportOrderModal);
+            document.getElementById('cancelReportOrder').addEventListener('click', closeReportOrderModal);
+            document.querySelector('#reportOrderModal .close-modal').addEventListener('click', closeReportOrderModal);
+            document.getElementById('reportOrderForm').addEventListener('submit', saveReportOrder);
             
             // تحميل اسم المدرسة
             document.getElementById('schoolName').value = appData.settings.schoolName || '';
@@ -1781,6 +1940,17 @@
             });
             document.getElementById('selectAllDepartmentsHeader').addEventListener('change', function() {
                 toggleSelectAllDepartments(this.checked);
+            });
+            
+            // ترتيب التقرير
+            document.getElementById('deleteSelectedReportOrder').addEventListener('click', function() {
+                deleteSelectedReportOrder();
+            });
+            document.getElementById('toggleSelectedReportOrder').addEventListener('click', function() {
+                toggleSelectedReportOrder();
+            });
+            document.getElementById('selectAllReportOrderHeader').addEventListener('change', function() {
+                toggleSelectAllReportOrder(this.checked);
             });
         }
 
@@ -2215,6 +2385,146 @@
             
             addSystemLog(`تم ${selectedIds[0] ? 'تفعيل/إلغاء تفعيل' : 'تغيير حالة'} ${selectedIds.length} قسم`);
             renderDepartmentsTable();
+            alert(`تم ${selectedIds[0] ? 'تفعيل/إلغاء تفعيل' : 'تغيير حالة'} ${selectedIds.length} قسم بنجاح`);
+        }
+
+        // عرض جدول ترتيب التقرير
+        function renderReportOrderTable() {
+            const table = document.getElementById('reportOrderTable');
+            const emptyState = document.getElementById('reportOrderEmpty');
+            
+            // ترتيب الأقسام حسب الترتيب المحدد
+            const sortedReportOrder = [...appData.reportOrder].sort((a, b) => a.order - b.order);
+            
+            if (sortedReportOrder.length === 0) {
+                table.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            table.innerHTML = '';
+            
+            sortedReportOrder.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="checkbox" class="report-order-checkbox" data-id="${item.id}"></td>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>
+                        <span class="status-badge ${item.status === 'active' ? 'status-active' : 'status-inactive'}">
+                            ${item.status === 'active' ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="user-actions">
+                            <button class="btn btn-xs btn-secondary edit-report-order" data-id="${item.id}">تعديل</button>
+                            <button class="btn btn-xs btn-danger delete-report-order" data-id="${item.id}">حذف</button>
+                            <button class="btn btn-xs ${item.status === 'active' ? 'btn-warning' : 'btn-success'} toggle-report-order" data-id="${item.id}">
+                                ${item.status === 'active' ? 'إلغاء التفعيل' : 'تفعيل'}
+                            </button>
+                        </div>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+            
+            // إعادة إعداد معالجي الأحداث
+            setupReportOrderEventHandlers();
+        }
+
+        // إعداد معالجي الأحداث لجدول ترتيب التقرير
+        function setupReportOrderEventHandlers() {
+            document.querySelectorAll('.edit-report-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const reportOrderId = parseInt(this.getAttribute('data-id'));
+                    editReportOrder(reportOrderId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-report-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const reportOrderId = parseInt(this.getAttribute('data-id'));
+                    deleteReportOrder(reportOrderId);
+                });
+            });
+            
+            document.querySelectorAll('.toggle-report-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const reportOrderId = parseInt(this.getAttribute('data-id'));
+                    toggleReportOrder(reportOrderId);
+                });
+            });
+            
+            document.querySelectorAll('.report-order-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateSelectAllReportOrderState();
+                });
+            });
+        }
+
+        // تحديد/إلغاء تحديد جميع أقسام ترتيب التقرير
+        function toggleSelectAllReportOrder(checked) {
+            document.querySelectorAll('#reportOrderTable .report-order-checkbox').forEach(checkbox => {
+                checkbox.checked = checked;
+            });
+            
+            document.getElementById('selectAllReportOrderHeader').checked = checked;
+        }
+
+        // تحديث حالة تحديد الكل لأقسام ترتيب التقرير
+        function updateSelectAllReportOrderState() {
+            const checkboxes = document.querySelectorAll('#reportOrderTable .report-order-checkbox');
+            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(checkbox => checkbox.checked);
+            
+            document.getElementById('selectAllReportOrderHeader').checked = allChecked;
+        }
+
+        // حذف أقسام ترتيب التقرير المحددة
+        function deleteSelectedReportOrder() {
+            const selectedCheckboxes = document.querySelectorAll('#reportOrderTable .report-order-checkbox:checked');
+            
+            if (selectedCheckboxes.length === 0) {
+                alert('يرجى تحديد أقسام لحذفها');
+                return;
+            }
+            
+            if (confirm(`هل أنت متأكد من حذف ${selectedCheckboxes.length} قسم؟`)) {
+                const selectedIds = Array.from(selectedCheckboxes).map(checkbox => parseInt(checkbox.getAttribute('data-id')));
+                
+                // حذف الأقسام المحددة
+                appData.reportOrder = appData.reportOrder.filter(item => !selectedIds.includes(item.id));
+                saveDataToStorage();
+                
+                addSystemLog(`تم حذف ${selectedIds.length} قسم من ترتيب التقرير`);
+                renderReportOrderTable();
+                alert(`تم حذف ${selectedIds.length} قسم بنجاح`);
+            }
+        }
+
+        // تفعيل/إلغاء تفعيل أقسام ترتيب التقرير المحددة
+        function toggleSelectedReportOrder() {
+            const selectedCheckboxes = document.querySelectorAll('#reportOrderTable .report-order-checkbox:checked');
+            
+            if (selectedCheckboxes.length === 0) {
+                alert('يرجى تحديد أقسام لتغيير حالتها');
+                return;
+            }
+            
+            const selectedIds = Array.from(selectedCheckboxes).map(checkbox => parseInt(checkbox.getAttribute('data-id')));
+            
+            // تغيير حالة الأقسام المحددة
+            selectedIds.forEach(itemId => {
+                const item = appData.reportOrder.find(i => i.id === itemId);
+                if (item) {
+                    item.status = item.status === 'active' ? 'inactive' : 'active';
+                }
+            });
+            
+            saveDataToStorage();
+            
+            addSystemLog(`تم ${selectedIds[0] ? 'تفعيل/إلغاء تفعيل' : 'تغيير حالة'} ${selectedIds.length} قسم من ترتيب التقرير`);
+            renderReportOrderTable();
             alert(`تم ${selectedIds[0] ? 'تفعيل/إلغاء تفعيل' : 'تغيير حالة'} ${selectedIds.length} قسم بنجاح`);
         }
 
@@ -2873,6 +3183,143 @@
             
             addSystemLog(`تم ${department.status === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} القسم: ${department.name}`);
             alert(`تم ${department.status === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} القسم بنجاح`);
+        }
+
+        // عرض نموذج إضافة قسم ترتيب التقرير
+        function showAddReportOrderModal() {
+            document.getElementById('reportOrderModalTitle').textContent = 'إضافة قسم ترتيب التقرير';
+            document.getElementById('reportOrderForm').reset();
+            document.getElementById('reportOrderId').value = '';
+            
+            // ملء قائمة الأسماء المتاحة
+            const nameSelect = document.getElementById('reportOrderName');
+            nameSelect.innerHTML = '<option value="">اختر اسم القسم</option>';
+            
+            // إضافة أسماء الأقسام من إدارة المستخدمين
+            const availableNames = [
+                'القيادة العليا',
+                'القيادة الوسطى',
+                'المعلمات'
+            ];
+            
+            availableNames.forEach(name => {
+                // التحقق من عدم وجود الاسم مسبقاً في ترتيب التقرير
+                if (!appData.reportOrder.some(item => item.name === name)) {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    nameSelect.appendChild(option);
+                }
+            });
+            
+            document.getElementById('reportOrderModal').style.display = 'flex';
+        }
+
+        // إغلاق نافذة ترتيب التقرير
+        function closeReportOrderModal() {
+            document.getElementById('reportOrderModal').style.display = 'none';
+        }
+
+        // حفظ قسم ترتيب التقرير
+        function saveReportOrder(e) {
+            e.preventDefault();
+            
+            const reportOrderId = document.getElementById('reportOrderId').value;
+            const name = document.getElementById('reportOrderName').value;
+            const status = document.getElementById('reportOrderStatus').value;
+            
+            if (!name) {
+                alert('يرجى اختيار اسم القسم');
+                return;
+            }
+            
+            if (reportOrderId) {
+                // تعديل قسم موجود
+                const reportOrderIndex = appData.reportOrder.findIndex(d => d.id === parseInt(reportOrderId));
+                if (reportOrderIndex !== -1) {
+                    appData.reportOrder[reportOrderIndex].name = name;
+                    appData.reportOrder[reportOrderIndex].status = status;
+                    addSystemLog(`تم تعديل قسم ترتيب التقرير: ${name}`);
+                }
+            } else {
+                // إضافة قسم جديد
+                const maxOrder = Math.max(...appData.reportOrder.map(d => d.order), 0);
+                const newReportOrder = {
+                    id: Math.max(...appData.reportOrder.map(d => d.id), 0) + 1,
+                    name,
+                    status,
+                    order: maxOrder + 1
+                };
+                appData.reportOrder.push(newReportOrder);
+                addSystemLog(`تم إضافة قسم ترتيب التقرير جديد: ${name}`);
+            }
+            
+            saveDataToStorage();
+            closeReportOrderModal();
+            renderReportOrderTable();
+            
+            alert('تم حفظ قسم ترتيب التقرير بنجاح');
+        }
+
+        // تعديل قسم ترتيب التقرير
+        function editReportOrder(reportOrderId) {
+            const item = appData.reportOrder.find(d => d.id === reportOrderId);
+            if (!item) return;
+            
+            document.getElementById('reportOrderModalTitle').textContent = 'تعديل قسم ترتيب التقرير';
+            document.getElementById('reportOrderId').value = item.id;
+            document.getElementById('reportOrderName').value = item.name;
+            document.getElementById('reportOrderStatus').value = item.status;
+            
+            // ملء قائمة الأسماء المتاحة
+            const nameSelect = document.getElementById('reportOrderName');
+            nameSelect.innerHTML = '<option value="">اختر اسم القسم</option>';
+            
+            // إضافة أسماء الأقسام من إدارة المستخدمين
+            const availableNames = [
+                'القيادة العليا',
+                'القيادة الوسطى',
+                'المعلمات'
+            ];
+            
+            availableNames.forEach(name => {
+                // السماح بالاسم الحالي حتى لو كان موجوداً في القائمة
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                if (name === item.name) {
+                    option.selected = true;
+                }
+                nameSelect.appendChild(option);
+            });
+            
+            document.getElementById('reportOrderModal').style.display = 'flex';
+        }
+
+        // حذف قسم ترتيب التقرير
+        function deleteReportOrder(reportOrderId) {
+            if (confirm('هل أنت متأكد من حذف هذا القسم من ترتيب التقرير؟')) {
+                const item = appData.reportOrder.find(d => d.id === reportOrderId);
+                appData.reportOrder = appData.reportOrder.filter(d => d.id !== reportOrderId);
+                saveDataToStorage();
+                renderReportOrderTable();
+                
+                addSystemLog(`تم حذف قسم ترتيب التقرير: ${item.name}`);
+                alert('تم حذف قسم ترتيب التقرير بنجاح');
+            }
+        }
+
+        // تفعيل/إلغاء تفعيل قسم ترتيب التقرير
+        function toggleReportOrder(reportOrderId) {
+            const item = appData.reportOrder.find(d => d.id === reportOrderId);
+            if (!item) return;
+            
+            item.status = item.status === 'active' ? 'inactive' : 'active';
+            saveDataToStorage();
+            renderReportOrderTable();
+            
+            addSystemLog(`تم ${item.status === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} قسم ترتيب التقرير: ${item.name}`);
+            alert(`تم ${item.status === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} قسم ترتيب التقرير بنجاح`);
         }
 
         // عرض سجل النظام
