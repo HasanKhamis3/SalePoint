@@ -1023,17 +1023,20 @@
                                 <div class="bulk-actions">
                                     <button class="btn btn-sm btn-danger" id="deleteSelectedSenior">حذف المحددين</button>
                                     <button class="btn btn-sm btn-warning" id="toggleSelectedSenior">تفعيل/إلغاء المحددين</button>
+                                    <label class="select-all-checkbox">
+                                        <input type="checkbox" id="selectAllSeniorHeader"> تحديد الكل
+                                    </label>
                                 </div>
                             </div>
                             
                             <table class="user-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllSeniorHeader"></th>
                                         <th>#</th>
                                         <th>الأسم</th>
                                         <th>الوظيفة</th>
                                         <th>رقم الهاتف</th>
+                                        <th>الحالة</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -1066,17 +1069,20 @@
                                 <div class="bulk-actions">
                                     <button class="btn btn-sm btn-danger" id="deleteSelectedMiddle">حذف المحددين</button>
                                     <button class="btn btn-sm btn-warning" id="toggleSelectedMiddle">تفعيل/إلغاء المحددين</button>
+                                    <label class="select-all-checkbox">
+                                        <input type="checkbox" id="selectAllMiddleHeader"> تحديد الكل
+                                    </label>
                                 </div>
                             </div>
                             
                             <table class="user-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllMiddleHeader"></th>
                                         <th>#</th>
                                         <th>الأسم</th>
                                         <th>الوظيفة</th>
                                         <th>رقم الهاتف</th>
+                                        <th>الحالة</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -1109,16 +1115,19 @@
                                 <div class="bulk-actions">
                                     <button class="btn btn-sm btn-danger" id="deleteSelectedTeachers">حذف المحددين</button>
                                     <button class="btn btn-sm btn-warning" id="toggleSelectedTeachers">تفعيل/إلغاء المحددين</button>
+                                    <label class="select-all-checkbox">
+                                        <input type="checkbox" id="selectAllTeachersHeader"> تحديد الكل
+                                    </label>
                                 </div>
                             </div>
                             
                             <table class="user-table teachers-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllTeachersHeader"></th>
                                         <th>#</th>
                                         <th>الأسم</th>
                                         <th>القسم/المادة</th>
+                                        <th>الحالة</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -1148,13 +1157,15 @@
                                 <div class="bulk-actions">
                                     <button class="btn btn-sm btn-danger" id="deleteSelectedDepartments">حذف المحددين</button>
                                     <button class="btn btn-sm btn-warning" id="toggleSelectedDepartments">تفعيل/إلغاء المحددين</button>
+                                    <label class="select-all-checkbox">
+                                        <input type="checkbox" id="selectAllDepartmentsHeader"> تحديد الكل
+                                    </label>
                                 </div>
                             </div>
                             
                             <table class="departments-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAllDepartmentsHeader"></th>
                                         <th>#</th>
                                         <th>اسم القسم / المادة</th>
                                         <th>الحالة</th>
@@ -1188,13 +1199,15 @@
                             <div class="bulk-actions">
                                 <button class="btn btn-sm btn-danger" id="deleteSelectedReportOrder">حذف المحددين</button>
                                 <button class="btn btn-sm btn-warning" id="toggleSelectedReportOrder">تفعيل/إلغاء المحددين</button>
+                                <label class="select-all-checkbox">
+                                    <input type="checkbox" id="selectAllReportOrderHeader"> تحديد الكل
+                                </label>
                             </div>
                         </div>
                         
                         <table class="report-order-table">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="selectAllReportOrderHeader"></th>
                                     <th>#</th>
                                     <th>اسم القسم</th>
                                     <th>الحالة</th>
@@ -1445,7 +1458,7 @@
                     avatar: 'ع',
                     active: true,
                     hasAccess: true,
-                    phone: '٢٩٤',
+                    phone: '39669118',
                     order: 1,
                     permissions: createDefaultPermissions('senior_leadership')
                 },
@@ -1457,7 +1470,7 @@
                     avatar: 'ل',
                     active: true,
                     hasAccess: true,
-                    phone: '٣٩٥',
+                    phone: '33182200',
                     order: 2,
                     permissions: createDefaultPermissions('senior_leadership')
                 },
@@ -1469,7 +1482,7 @@
                     avatar: 'م',
                     active: true,
                     hasAccess: true,
-                    phone: '٣٩٦',
+                    phone: '39669118',
                     order: 3,
                     permissions: createDefaultPermissions('senior_leadership')
                 },
@@ -1481,7 +1494,7 @@
                     avatar: 'ف',
                     active: true,
                     hasAccess: true,
-                    phone: '٣٩٧',
+                    phone: '33182200',
                     order: 1,
                     permissions: createDefaultPermissions('middle_leadership')
                 }
@@ -1983,11 +1996,15 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.position || ''}</td>
                     <td>${user.phone || ''}</td>
+                    <td>
+                        <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
+                            ${user.active ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
                     <td>
                         <div class="user-actions">
                             <button class="btn btn-xs btn-warning preview-user" data-id="${user.id}">معاينة</button>
@@ -2029,11 +2046,15 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.position || ''}</td>
                     <td>${user.phone || ''}</td>
+                    <td>
+                        <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
+                            ${user.active ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
                     <td>
                         <div class="user-actions">
                             <button class="btn btn-xs btn-warning preview-user" data-id="${user.id}">معاينة</button>
@@ -2075,10 +2096,14 @@
             sortedUsers.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
                     <td>${index + 1}</td>
                     <td>${user.name}</td>
                     <td>${user.department || ''}</td>
+                    <td>
+                        <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
+                            ${user.active ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
                     <td>
                         <div class="user-actions">
                             <button class="btn btn-xs btn-warning preview-user" data-id="${user.id}">معاينة</button>
@@ -2140,13 +2165,6 @@
                     });
                 });
             }
-            
-            // تحديث حالة تحديد الكل
-            document.querySelectorAll(`#${role === 'teacher' ? 'teachersTable' : role + 'Table'} .user-checkbox`).forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    updateSelectAllState(role);
-                });
-            });
         }
 
         // تحديد/إلغاء تحديد جميع المستخدمين
@@ -2158,15 +2176,6 @@
             
             // تحديث حالة تحديد الكل في الشريط العلوي
             document.getElementById(`selectAll${role.charAt(0).toUpperCase() + role.slice(1)}Header`).checked = checked;
-        }
-
-        // تحديث حالة تحديد الكل
-        function updateSelectAllState(role) {
-            const tableId = role === 'teacher' ? 'teachersTable' : role + 'Table';
-            const checkboxes = document.querySelectorAll(`#${tableId} .user-checkbox`);
-            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(checkbox => checkbox.checked);
-            
-            document.getElementById(`selectAll${role.charAt(0).toUpperCase() + role.slice(1)}Header`).checked = allChecked;
         }
 
         // حذف المستخدمين المحددين
@@ -2268,7 +2277,6 @@
             sortedDepartments.forEach((department, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="department-checkbox" data-id="${department.id}"></td>
                     <td>${index + 1}</td>
                     <td>${department.name}</td>
                     <td>
@@ -2315,12 +2323,6 @@
                     toggleDepartment(departmentId);
                 });
             });
-            
-            document.querySelectorAll('.department-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    updateSelectAllDepartmentsState();
-                });
-            });
         }
 
         // تحديد/إلغاء تحديد جميع الأقسام
@@ -2330,14 +2332,6 @@
             });
             
             document.getElementById('selectAllDepartmentsHeader').checked = checked;
-        }
-
-        // تحديث حالة تحديد الكل للأقسام
-        function updateSelectAllDepartmentsState() {
-            const checkboxes = document.querySelectorAll('#departmentsTable .department-checkbox');
-            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(checkbox => checkbox.checked);
-            
-            document.getElementById('selectAllDepartmentsHeader').checked = allChecked;
         }
 
         // حذف الأقسام المحددة
@@ -2408,7 +2402,6 @@
             sortedReportOrder.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="checkbox" class="report-order-checkbox" data-id="${item.id}"></td>
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
                     <td>
@@ -2455,12 +2448,6 @@
                     toggleReportOrder(reportOrderId);
                 });
             });
-            
-            document.querySelectorAll('.report-order-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    updateSelectAllReportOrderState();
-                });
-            });
         }
 
         // تحديد/إلغاء تحديد جميع أقسام ترتيب التقرير
@@ -2470,14 +2457,6 @@
             });
             
             document.getElementById('selectAllReportOrderHeader').checked = checked;
-        }
-
-        // تحديث حالة تحديد الكل لأقسام ترتيب التقرير
-        function updateSelectAllReportOrderState() {
-            const checkboxes = document.querySelectorAll('#reportOrderTable .report-order-checkbox');
-            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(checkbox => checkbox.checked);
-            
-            document.getElementById('selectAllReportOrderHeader').checked = allChecked;
         }
 
         // حذف أقسام ترتيب التقرير المحددة
