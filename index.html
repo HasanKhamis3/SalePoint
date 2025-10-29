@@ -1703,7 +1703,9 @@
                             <button class="btn btn-xs ${user.active ? 'btn-warning' : 'btn-success'} toggle-user" data-id="${user.id}">
                                 ${user.active ? 'إلغاء التفعيل' : 'تفعيل'}
                             </button>
-                            <button class="btn btn-xs btn-primary permissions-user" data-id="${user.id}">الصلاحيات</button>
+                            <button class="btn btn-xs ${user.hasAccess ? 'btn-success' : 'btn-secondary'} access-user" data-id="${user.id}">
+                                ${user.hasAccess ? 'إلغاء الوصول' : 'إذن الوصول'}
+                            </button>
                         </div>
                     </td>
                 `;
@@ -1748,7 +1750,9 @@
                             <button class="btn btn-xs ${user.active ? 'btn-warning' : 'btn-success'} toggle-user" data-id="${user.id}">
                                 ${user.active ? 'إلغاء التفعيل' : 'تفعيل'}
                             </button>
-                            <button class="btn btn-xs btn-primary permissions-user" data-id="${user.id}">الصلاحيات</button>
+                            <button class="btn btn-xs ${user.hasAccess ? 'btn-success' : 'btn-secondary'} access-user" data-id="${user.id}">
+                                ${user.hasAccess ? 'إلغاء الوصول' : 'إذن الوصول'}
+                            </button>
                         </div>
                     </td>
                 `;
@@ -1836,9 +1840,9 @@
                 });
             });
             
-            // الصلاحيات (للقادة فقط)
+            // إذن الوصول (للقادة فقط)
             if (role !== 'teacher') {
-                document.querySelectorAll(`#${role}Table .permissions-user`).forEach(btn => {
+                document.querySelectorAll(`#${role}Table .access-user`).forEach(btn => {
                     btn.addEventListener('click', function() {
                         const userId = parseInt(this.getAttribute('data-id'));
                         showPermissionsModal(userId);
