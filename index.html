@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تقرير تتبع جودة التعليم والتعلم</title>
+    <title>نظام تقارير جودة التعليم والتعلم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         :root {
             --primary: #2c5aa0;
@@ -36,13 +33,81 @@
             background-color: #f0f2f5;
             color: var(--dark);
             line-height: 1.6;
-            padding: 20px;
         }
 
         .container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--gray);
+        }
+
+        .nav-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .quality-report-section {
@@ -202,14 +267,6 @@
             background-color: #3d8b40;
         }
 
-        .btn-danger {
-            background-color: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
         .btn-success {
             background-color: var(--success);
             color: white;
@@ -235,7 +292,7 @@
         }
 
         .btn-loading::after {
-            content: "قيد التصوير...";
+            content: "جاري الحفظ...";
             position: absolute;
             top: 0;
             left: 0;
@@ -268,6 +325,110 @@
             text-align: center;
         }
 
+        .saved-reports-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .report-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .report-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .report-card-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .report-card-date {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .report-card-content {
+            margin-bottom: 1rem;
+        }
+
+        .report-card-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-card-stat {
+            text-align: center;
+        }
+
+        .report-card-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .report-card-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .report-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .report-card-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .report-card-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .report-card-btn.view {
+            color: var(--primary);
+        }
+
+        .report-card-btn.delete {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
         @media (max-width: 768px) {
             .report-actions {
                 flex-direction: column;
@@ -285,166 +446,205 @@
             .report-table td {
                 padding: 8px 4px;
             }
+            
+            .saved-reports-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>نظام تقارير جودة التعليم والتعلم</h1>
+                </div>
+                <div class="user-info">
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <div class="quality-report-section">
-            <div class="quality-report-header">
-                <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
-                <p class="quality-report-subtitle" id="schoolNameHeader">لمدرسة ــــــــــــــــــــــــــــــــــــ</p>
-                <p class="quality-report-subtitle" id="reportMonthHeader">شهر ____________</p>
-                <p class="quality-report-subtitle" id="academicYearHeader">العام الدراسي 2025 / 2026م</p>
-                <p class="quality-report-subtitle">إعداد المدير/ة المساعد/ة /يعتمد، مدير/ة المدرسة</p>
-            </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="create-report">إنشاء تقرير جديد</button>
+            <button class="nav-tab" data-tab="saved-reports">التقارير المحفوظة</button>
+        </div>
 
-            <!-- أولاً: متابعة تسليم القيادة الوسطى -->
-            <div class="report-section">
-                <h3 class="report-section-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</h3>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>القسم</th>
-                            <th>عدد استمارات الزيارات الصفية التي نفذت من قبل المعلم الأول أو المنسق خلال الشهر</th>
-                            <th>يوجد محضر اجتماع المعلم الأول أو المنسق مع المعلمين</th>
-                            <th>توجد خطة أسبوعية للمعلم الأول أو المنسق</th>
-                            <th>أسباب عدم التسليم</th>
-                        </tr>
-                    </thead>
-                    <tbody id="middleLeadershipReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-                <p class="report-notes">ملاحظات عامة: يتم التنسيق مع القيادة الوسطى لتنفيذ الزيارات الصفية بحسب ما يتناسب مع ظروف الجداول والنصاب المسند لهم.</p>
-            </div>
-
-            <!-- ثانياً: عدد الزيارات -->
-            <div class="report-section">
-                <h3 class="report-section-title">ثانياً: عدد الزيارات التي نُفذت خلال شهر ____________ من قبل:</h3>
-                <div class="form-group">
-                    <label for="seniorLeadershipVisits">1- القيادة العليا =</label>
-                    <input type="number" id="seniorLeadershipVisits" class="report-input" min="0">
+        <!-- صفحة إنشاء التقرير -->
+        <div id="create-report" class="tab-content active">
+            <div class="quality-report-section">
+                <div class="quality-report-header">
+                    <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
+                    <p class="quality-report-subtitle" id="schoolNameHeader">لمدرسة ــــــــــــــــــــــــــــــــــــ</p>
+                    <p class="quality-report-subtitle" id="reportMonthHeader">شهر ____________</p>
+                    <p class="quality-report-subtitle" id="academicYearHeader">العام الدراسي 2025 / 2026م</p>
+                    <p class="quality-report-subtitle">إعداد المدير/ة المساعد/ة /يعتمد، مدير/ة المدرسة</p>
                 </div>
-                <div class="form-group">
-                    <label for="middleLeadershipVisits">2- القيادة الوسطى =</label>
-                    <input type="number" id="middleLeadershipVisits" class="report-input" min="0">
+
+                <!-- أولاً: متابعة تسليم القيادة الوسطى -->
+                <div class="report-section">
+                    <h3 class="report-section-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>القسم</th>
+                                <th>عدد استمارات الزيارات الصفية التي نفذت من قبل المعلم الأول أو المنسق خلال الشهر</th>
+                                <th>يوجد محضر اجتماع المعلم الأول أو المنسق مع المعلمين</th>
+                                <th>توجد خطة أسبوعية للمعلم الأول أو المنسق</th>
+                                <th>أسباب عدم التسليم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="middleLeadershipReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+                    <p class="report-notes">ملاحظات عامة: يتم التنسيق مع القيادة الوسطى لتنفيذ الزيارات الصفية بحسب ما يتناسب مع ظروف الجداول والنصاب المسند لهم.</p>
+                </div>
+
+                <!-- ثانياً: عدد الزيارات -->
+                <div class="report-section">
+                    <h3 class="report-section-title">ثانياً: عدد الزيارات التي نُفذت خلال شهر ____________ من قبل:</h3>
+                    <div class="form-group">
+                        <label for="seniorLeadershipVisits">1- القيادة العليا =</label>
+                        <input type="number" id="seniorLeadershipVisits" class="report-input" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="middleLeadershipVisits">2- القيادة الوسطى =</label>
+                        <input type="number" id="middleLeadershipVisits" class="report-input" min="0">
+                    </div>
+                </div>
+
+                <!-- ثالثاً: أسماء المعلمين المُزارين -->
+                <div class="report-section">
+                    <h3 class="report-section-title">ثالثاً: بيان أسماء المعلمين المُزارين من قبل القيادة العليا والوسطى خلال شهر ____________</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>م</th>
+                                <th>اسم المعلم</th>
+                                <th>القسم</th>
+                                <th>تاريخ الزيارة</th>
+                                <th>تقييم الزيارة</th>
+                                <th>اسم الزائر</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherVisitsReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- رابعاً: عدد الزيارات الصفية وتقييم الأداء الصفي -->
+                <div class="report-section">
+                    <h3 class="report-section-title">رابعاً: عدد الزيارات الصفية وتقييم الأداء الصفي</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>م</th>
+                                <th>الأقسام الأكاديمية</th>
+                                <th>مجموع عدد الزيارات للقسم</th>
+                                <th>يفوق التوقعات بكثير</th>
+                                <th>يفوق التوقعات</th>
+                                <th>يفي بالتوقعات</th>
+                                <th>يفي بالتوقعات جزئياً</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performanceReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <label for="totalClassVisits">مجموع عدد الزيارات الصفية للقيادة العليا والوسطى</label>
+                        <input type="number" id="totalClassVisits" class="report-input" min="0">
+                    </div>
+                    <p class="report-notes">رسم بياني يوضح مجموع عدد الزيارات الصفية للقيادة العليا والوسطى</p>
+                </div>
+
+                <!-- سادساً: المعلمين المتميزين والأولى بالرعاية -->
+                <div class="report-section">
+                    <h3 class="report-section-title">سادساً: حصر أسماء المعلمين المتميزين في الأقسام الأكاديمية</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>اسم المعلم</th>
+                                <th>التقدير</th>
+                                <th>المبررات</th>
+                                <th>القسم الأكاديمي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="distinguishedTeachersReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+
+                    <h4 style="margin-top: 2rem; color: var(--primary);">حصر أسماء المعلمين الأولى بالرعاية في الأقسام الأكاديمية</h4>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>اسم المعلم</th>
+                                <th>التقدير</th>
+                                <th>المبررات</th>
+                                <th>القسم الأكاديمي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachersNeedCareReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- سابعاً: التقرير النوعي -->
+                <div class="report-section">
+                    <h3 class="report-section-title">سابعاً: التقرير النوعي</h3>
+                    <h4>جوانب القوة والتطوير لأداء المعلمين خلال الزيارات الصفية في الأقسام الأكاديمية</h4>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>الأقسام الأكاديمية</th>
+                                <th>جوانب القوة</th>
+                                <th>جوانب بحاجة إلى تطوير</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qualityReportTable">
+                            <!-- سيتم ملؤها بالبيانات -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- أزرار التحميل -->
+                <div class="report-actions">
+                    <button class="btn btn-success" id="saveQualityReport">
+                        <i class="fas fa-save"></i> حفظ التقرير
+                    </button>
+                    <button class="btn btn-secondary" id="downloadWordReport">
+                        <i class="fas fa-file-word"></i> تحميل كملف Word
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- ثالثاً: أسماء المعلمين المُزارين -->
-            <div class="report-section">
-                <h3 class="report-section-title">ثالثاً: بيان أسماء المعلمين المُزارين من قبل القيادة العليا والوسطى خلال شهر ____________</h3>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>م</th>
-                            <th>اسم المعلم</th>
-                            <th>القسم</th>
-                            <th>تاريخ الزيارة</th>
-                            <th>تقييم الزيارة</th>
-                            <th>اسم الزائر</th>
-                        </tr>
-                    </thead>
-                    <tbody id="teacherVisitsReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- رابعاً: عدد الزيارات الصفية وتقييم الأداء الصفي -->
-            <div class="report-section">
-                <h3 class="report-section-title">رابعاً: عدد الزيارات الصفية وتقييم الأداء الصفي</h3>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>م</th>
-                            <th>الأقسام الأكاديمية</th>
-                            <th>مجموع عدد الزيارات للقسم</th>
-                            <th>يفوق التوقعات بكثير</th>
-                            <th>يفوق التوقعات</th>
-                            <th>يفي بالتوقعات</th>
-                            <th>يفي بالتوقعات جزئياً</th>
-                        </tr>
-                    </thead>
-                    <tbody id="performanceReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-                <div class="form-group">
-                    <label for="totalClassVisits">مجموع عدد الزيارات الصفية للقيادة العليا والوسطى</label>
-                    <input type="number" id="totalClassVisits" class="report-input" min="0">
+        <!-- صفحة التقارير المحفوظة -->
+        <div id="saved-reports" class="tab-content">
+            <div class="quality-report-section">
+                <div class="quality-report-header">
+                    <h2 class="quality-report-title">التقارير المحفوظة</h2>
+                    <p class="quality-report-subtitle">عرض وإدارة التقارير المحفوظة سابقاً</p>
                 </div>
-                <p class="report-notes">رسم بياني يوضح مجموع عدد الزيارات الصفية للقيادة العليا والوسطى</p>
-            </div>
 
-            <!-- سادساً: المعلمين المتميزين والأولى بالرعاية -->
-            <div class="report-section">
-                <h3 class="report-section-title">سادساً: حصر أسماء المعلمين المتميزين في الأقسام الأكاديمية</h3>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>اسم المعلم</th>
-                            <th>التقدير</th>
-                            <th>المبررات</th>
-                            <th>القسم الأكاديمي</th>
-                        </tr>
-                    </thead>
-                    <tbody id="distinguishedTeachersReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-
-                <h4 style="margin-top: 2rem; color: var(--primary);">حصر أسماء المعلمين الأولى بالرعاية في الأقسام الأكاديمية</h4>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>اسم المعلم</th>
-                            <th>التقدير</th>
-                            <th>المبررات</th>
-                            <th>القسم الأكاديمي</th>
-                        </tr>
-                    </thead>
-                    <tbody id="teachersNeedCareReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- سابعاً: التقرير النوعي -->
-            <div class="report-section">
-                <h3 class="report-section-title">سابعاً: التقرير النوعي</h3>
-                <h4>جوانب القوة والتطوير لأداء المعلمين خلال الزيارات الصفية في الأقسام الأكاديمية</h4>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>الأقسام الأكاديمية</th>
-                            <th>جوانب القوة</th>
-                            <th>جوانب بحاجة إلى تطوير</th>
-                        </tr>
-                    </thead>
-                    <tbody id="qualityReportTable">
-                        <!-- سيتم ملؤها بالبيانات -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- أزرار التحميل -->
-            <div class="report-actions">
-                <button class="btn btn-success" id="downloadWordReport">
-                    <i class="fas fa-file-word"></i> تحميل كملف Word
-                </button>
-                <button class="btn btn-danger" id="downloadPdfReport">
-                    <i class="fas fa-file-pdf"></i> تحميل كملف PDF
-                </button>
-                <button class="btn btn-secondary" id="saveQualityReport">
-                    <i class="fas fa-save"></i> حفظ التقرير
-                </button>
-                <button class="btn btn-warning" id="loadSampleData">
-                    <i class="fas fa-download"></i> تحميل بيانات نموذجية
-                </button>
+                <div id="savedReportsContainer" class="saved-reports-container">
+                    <!-- سيتم ملؤها بالتقارير المحفوظة -->
+                </div>
             </div>
         </div>
     </div>
@@ -524,26 +724,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('جاري تهيئة التطبيق...');
             
+            // تحديث التاريخ الحالي
+            updateCurrentDate();
+            
+            // إعداد التنقل بين الصفحات
+            setupNavigation();
+            
             // إعداد قسم تقرير الجودة
             setupQualityReport();
             
             // إعداد أزرار التحميل مع تأثيرات الضغط
             const wordBtn = document.getElementById('downloadWordReport');
-            const pdfBtn = document.getElementById('downloadPdfReport');
             const saveBtn = document.getElementById('saveQualityReport');
-            const loadBtn = document.getElementById('loadSampleData');
 
             if (wordBtn) {
                 wordBtn.addEventListener('click', function(e) {
                     console.log('تم النقر على زر Word');
                     showLoadingEffect(e.target, downloadWordReport);
-                });
-            }
-
-            if (pdfBtn) {
-                pdfBtn.addEventListener('click', function(e) {
-                    console.log('تم النقر على زر PDF');
-                    showLoadingEffect(e.target, downloadPdfReport);
                 });
             }
 
@@ -554,20 +751,55 @@
                 });
             }
 
-            if (loadBtn) {
-                loadBtn.addEventListener('click', function(e) {
-                    console.log('تم النقر على زر تحميل البيانات');
-                    showLoadingEffect(e.target, loadSampleData);
-                });
-            }
-
             // إعداد حقول الإدخال
             document.getElementById('seniorLeadershipVisits').addEventListener('change', updateQualityReport);
             document.getElementById('middleLeadershipVisits').addEventListener('change', updateQualityReport);
             document.getElementById('totalClassVisits').addEventListener('change', updateQualityReport);
 
+            // تحميل البيانات النموذجية تلقائياً
+            loadSampleData();
+            
             console.log('تم تهيئة جميع الأزرار بنجاح');
         });
+
+        // تحديث التاريخ الحالي
+        function updateCurrentDate() {
+            const currentDate = new Date().toLocaleDateString('ar-EG', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('currentDate').textContent = currentDate;
+        }
+
+        // إعداد التنقل بين الصفحات
+        function setupNavigation() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // إزالة النشاط من جميع الأزرار
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // إضافة النشاط للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع المحتويات
+                    const contents = document.querySelectorAll('.tab-content');
+                    contents.forEach(content => content.classList.remove('active'));
+                    
+                    // إظهار المحتوى المحدد
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // إذا كانت صفحة التقارير المحفوظة، قم بتحميلها
+                    if (tabId === 'saved-reports') {
+                        loadSavedReports();
+                    }
+                });
+            });
+        }
 
         // وظيفة لإظهار تأثير التحميل
         function showLoadingEffect(button, callback) {
@@ -646,9 +878,35 @@
             console.log('جاري حفظ التقرير...');
             updateQualityReport();
             try {
+                // إنشاء معرف فريد للتقرير
+                const reportId = 'report_' + new Date().getTime();
+                
+                // إضافة معلومات إضافية للتقرير
+                const reportToSave = {
+                    ...qualityReportData,
+                    id: reportId,
+                    createdAt: new Date().toISOString(),
+                    reportMonth: new Date().toLocaleDateString('ar-EG', { month: 'long' })
+                };
+                
+                // الحصول على التقارير المحفوظة سابقاً
+                const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+                
+                // إضافة التقرير الجديد
+                savedReports.push(reportToSave);
+                
+                // حفظ التقارير في localStorage
+                localStorage.setItem('savedReports', JSON.stringify(savedReports));
+                
+                // حفظ التقرير الحالي أيضاً
                 localStorage.setItem('qualityReportData', JSON.stringify(qualityReportData));
+                
                 alert('تم حفظ تقرير الجودة بنجاح');
                 console.log('تم حفظ التقرير بنجاح');
+                
+                // الانتقال تلقائياً إلى صفحة التقارير المحفوظة
+                document.querySelector('[data-tab="saved-reports"]').click();
+                
             } catch (e) {
                 alert('حدث خطأ أثناء حفظ التقرير');
                 console.error('خطأ في الحفظ:', e);
@@ -658,8 +916,90 @@
         // تحميل بيانات نموذجية
         function loadSampleData() {
             console.log('جاري تحميل البيانات النموذجية...');
-            if (confirm('هل تريد تحميل البيانات النموذجية؟ سيتم استبدال جميع البيانات الحالية.')) {
-                Object.assign(qualityReportData, JSON.parse(JSON.stringify(sampleData)));
+            Object.assign(qualityReportData, JSON.parse(JSON.stringify(sampleData)));
+            
+            // تحديث الحقول
+            document.getElementById('seniorLeadershipVisits').value = qualityReportData.seniorLeadershipVisits;
+            document.getElementById('middleLeadershipVisits').value = qualityReportData.middleLeadershipVisits;
+            document.getElementById('totalClassVisits').value = qualityReportData.totalClassVisits;
+            
+            // إعادة تعبئة الجداول
+            renderMiddleLeadershipReportTable();
+            renderTeacherVisitsReportTable();
+            renderPerformanceReportTable();
+            renderDistinguishedTeachersReportTable();
+            renderTeachersNeedCareReportTable();
+            renderQualityReportTable();
+            
+            console.log('تم تحميل البيانات النموذجية بنجاح');
+        }
+
+        // تحميل التقارير المحفوظة
+        function loadSavedReports() {
+            const container = document.getElementById('savedReportsContainer');
+            if (!container) return;
+            
+            // الحصول على التقارير المحفوظة
+            const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+            
+            if (savedReports.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>لا توجد تقارير محفوظة</h3>
+                        <p>لم يتم حفظ أي تقارير بعد. قم بإنشاء تقرير جديد وحفظه.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // عرض التقارير المحفوظة
+            container.innerHTML = savedReports.map(report => {
+                const date = new Date(report.createdAt).toLocaleDateString('ar-EG');
+                
+                return `
+                    <div class="report-card">
+                        <div class="report-card-header">
+                            <div class="report-card-title">تقرير ${report.reportMonth}</div>
+                            <div class="report-card-date">${date}</div>
+                        </div>
+                        <div class="report-card-content">
+                            <div class="report-card-stats">
+                                <div class="report-card-stat">
+                                    <div class="report-card-stat-value">${report.seniorLeadershipVisits}</div>
+                                    <div class="report-card-stat-label">القيادة العليا</div>
+                                </div>
+                                <div class="report-card-stat">
+                                    <div class="report-card-stat-value">${report.middleLeadershipVisits}</div>
+                                    <div class="report-card-stat-label">القيادة الوسطى</div>
+                                </div>
+                                <div class="report-card-stat">
+                                    <div class="report-card-stat-value">${report.totalClassVisits}</div>
+                                    <div class="report-card-stat-label">إجمالي الزيارات</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="report-card-actions">
+                            <button class="report-card-btn view" onclick="viewReport('${report.id}')">
+                                <i class="fas fa-eye"></i> عرض
+                            </button>
+                            <button class="report-card-btn delete" onclick="deleteReport('${report.id}')">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // عرض تقرير محفوظ
+        function viewReport(reportId) {
+            const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+            const report = savedReports.find(r => r.id === reportId);
+            
+            if (report) {
+                // تعبئة البيانات في النموذج
+                Object.assign(qualityReportData, report);
                 
                 // تحديث الحقول
                 document.getElementById('seniorLeadershipVisits').value = qualityReportData.seniorLeadershipVisits;
@@ -674,8 +1014,25 @@
                 renderTeachersNeedCareReportTable();
                 renderQualityReportTable();
                 
-                alert('تم تحميل البيانات النموذجية بنجاح');
-                console.log('تم تحميل البيانات النموذجية بنجاح');
+                // الانتقال إلى صفحة إنشاء التقرير
+                document.querySelector('[data-tab="create-report"]').click();
+                
+                alert('تم تحميل التقرير بنجاح');
+            }
+        }
+
+        // حذف تقرير محفوظ
+        function deleteReport(reportId) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذا التقرير؟')) {
+                const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+                const updatedReports = savedReports.filter(r => r.id !== reportId);
+                
+                localStorage.setItem('savedReports', JSON.stringify(updatedReports));
+                
+                // إعادة تحميل التقارير المحفوظة
+                loadSavedReports();
+                
+                alert('تم حذف التقرير بنجاح');
             }
         }
 
@@ -963,156 +1320,6 @@
             content += `</body></html>`;
             
             return content;
-        }
-
-        // تحميل التقرير كملف PDF
-        function downloadPdfReport() {
-            console.log('جاري إنشاء ملف PDF...');
-            try {
-                updateQualityReport();
-                
-                // التحقق من وجود مكتبة jsPDF
-                if (typeof window.jspdf === 'undefined') {
-                    throw new Error('مكتبة PDF غير متوفرة');
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // إعداد المستند
-                doc.setDocumentProperties({
-                    title: 'تقرير جودة التعليم',
-                    subject: 'تقرير متابعة جودة التعليم والتعلم',
-                    author: 'نظام إدارة الجودة',
-                    keywords: 'جودة, تعليم, تقرير',
-                    creator: 'نظام إدارة الجودة'
-                });
-
-                const currentMonth = new Date().toLocaleDateString('ar-EG', { month: 'long' });
-                const currentDate = new Date().toLocaleDateString('ar-EG');
-                let yPosition = 20;
-                
-                // عنوان التقرير
-                doc.setFontSize(16);
-                doc.setTextColor(44, 90, 160);
-                doc.text('تقرير متابعة جودة التعليم والتعلم', 105, yPosition, { align: 'center' });
-                yPosition += 10;
-                
-                doc.setFontSize(12);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`لمدرسة ${qualityReportData.schoolName || 'ــــــــــــــــــــــــــــــــــ'}`, 105, yPosition, { align: 'center' });
-                yPosition += 7;
-                
-                doc.text(`شهر ${currentMonth}`, 105, yPosition, { align: 'center' });
-                yPosition += 7;
-                doc.text('العام الدراسي 2025 / 2026م', 105, yPosition, { align: 'center' });
-                yPosition += 15;
-                
-                // بيانات الزيارات
-                doc.setTextColor(0, 0, 0);
-                doc.setFontSize(14);
-                doc.text('إحصائيات الزيارات:', 20, yPosition);
-                yPosition += 10;
-                
-                doc.setFontSize(12);
-                doc.text(`• عدد زيارات القيادة العليا: ${qualityReportData.seniorLeadershipVisits}`, 20, yPosition);
-                yPosition += 7;
-                doc.text(`• عدد زيارات القيادة الوسطى: ${qualityReportData.middleLeadershipVisits}`, 20, yPosition);
-                yPosition += 7;
-                doc.text(`• إجمالي الزيارات الصفية: ${qualityReportData.totalClassVisits}`, 20, yPosition);
-                yPosition += 15;
-                
-                // المعلمين المتميزين
-                if (qualityReportData.distinguishedTeachers.length > 0) {
-                    doc.setFontSize(14);
-                    doc.text('المعلمين المتميزين:', 20, yPosition);
-                    yPosition += 10;
-                    
-                    doc.setFontSize(10);
-                    qualityReportData.distinguishedTeachers.forEach((teacher, index) => {
-                        if (yPosition > 270) {
-                            doc.addPage();
-                            yPosition = 20;
-                        }
-                        doc.text(`${index + 1}. ${teacher.name} - ${teacher.department}`, 25, yPosition);
-                        yPosition += 6;
-                    });
-                    yPosition += 10;
-                }
-                
-                // المعلمين الأولى بالرعاية
-                if (qualityReportData.teachersNeedCare.length > 0) {
-                    if (yPosition > 250) {
-                        doc.addPage();
-                        yPosition = 20;
-                    }
-                    
-                    doc.setFontSize(14);
-                    doc.text('المعلمين الأولى بالرعاية:', 20, yPosition);
-                    yPosition += 10;
-                    
-                    doc.setFontSize(10);
-                    qualityReportData.teachersNeedCare.forEach((teacher, index) => {
-                        if (yPosition > 270) {
-                            doc.addPage();
-                            yPosition = 20;
-                        }
-                        doc.text(`${index + 1}. ${teacher.name} - ${teacher.department}`, 25, yPosition);
-                        yPosition += 6;
-                    });
-                    yPosition += 10;
-                }
-                
-                // استخدام jsPDF AutoTable لعرض الجداول
-                if (qualityReportData.middleLeadership.length > 0) {
-                    if (yPosition > 200) {
-                        doc.addPage();
-                        yPosition = 20;
-                    }
-                    
-                    doc.setFontSize(14);
-                    doc.text('متابعة تسليم القيادة الوسطى:', 20, yPosition);
-                    yPosition += 10;
-                    
-                    const middleLeadershipTableData = qualityReportData.middleLeadership.map(item => [
-                        item.department,
-                        item.visits,
-                        item.meeting,
-                        item.plan,
-                        item.reasons
-                    ]);
-                    
-                    doc.autoTable({
-                        startY: yPosition,
-                        head: [['القسم', 'عدد الزيارات', 'محضر اجتماع', 'خطة أسبوعية', 'أسباب عدم التسليم']],
-                        body: middleLeadershipTableData,
-                        theme: 'grid',
-                        styles: { font: 'Cairo', fontSize: 8, cellPadding: 3, halign: 'center' },
-                        headStyles: { fillColor: [44, 90, 160], textColor: 255, fontStyle: 'bold' }
-                    });
-                    
-                    yPosition = doc.lastAutoTable.finalY + 10;
-                }
-                
-                // تذييل الصفحة
-                if (yPosition > 270) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                
-                doc.setFontSize(10);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`تم إنشاء هذا التقرير بتاريخ ${currentDate}`, 105, 285, { align: 'center' });
-                
-                // حفظ الملف
-                doc.save(`تقرير_جودة_التعليم_${currentMonth}.pdf`);
-                
-                alert('تم تنزيل التقرير كملف PDF بنجاح');
-                console.log('تم إنشاء ملف PDF بنجاح');
-            } catch (error) {
-                console.error('Error generating PDF file:', error);
-                alert('حدث خطأ أثناء إنشاء ملف PDF: ' + error.message);
-            }
         }
 
         // دوال العرض للجداول
