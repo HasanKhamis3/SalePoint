@@ -327,7 +327,7 @@
 
         .saved-reports-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
@@ -337,6 +337,9 @@
             box-shadow: var(--box-shadow);
             padding: 1.5rem;
             transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .report-card:hover {
@@ -365,74 +368,91 @@
 
         .report-card-content {
             margin-bottom: 1rem;
+            flex-grow: 1;
         }
 
         .report-card-stats {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
         }
 
         .report-card-stat {
             text-align: center;
+            flex: 1;
         }
 
         .report-card-stat-value {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
+            display: block;
         }
 
         .report-card-stat-label {
             font-size: 0.8rem;
             color: var(--gray);
+            display: block;
+            margin-top: 5px;
         }
 
         .report-card-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
+            margin-top: auto;
         }
 
         .report-card-btn {
-            flex: 1;
-            padding: 8px 12px;
+            padding: 10px 12px;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 5px;
+            text-decoration: none;
+            color: inherit;
         }
 
         .report-card-btn:hover {
             background-color: #e9ecef;
+            transform: translateY(-2px);
         }
 
         .report-card-btn.view {
             color: var(--primary);
+            border-color: var(--primary);
         }
 
         .report-card-btn.edit {
             color: var(--warning);
+            border-color: var(--warning);
         }
 
         .report-card-btn.download {
             color: var(--success);
+            border-color: var(--success);
         }
 
         .report-card-btn.delete {
             color: var(--danger);
+            border-color: var(--danger);
         }
 
         .empty-state {
             text-align: center;
             padding: 3rem;
             color: var(--gray);
+            grid-column: 1 / -1;
         }
 
         .empty-state i {
@@ -520,17 +540,17 @@
             }
             
             .report-card-actions {
-                flex-wrap: wrap;
-            }
-            
-            .report-card-btn {
-                flex: 1 0 45%;
-                margin-bottom: 5px;
+                grid-template-columns: 1fr;
             }
             
             .preview-content {
                 width: 95%;
                 padding: 1rem;
+            }
+            
+            .report-card-stats {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
@@ -1077,16 +1097,16 @@
                         <div class="report-card-content">
                             <div class="report-card-stats">
                                 <div class="report-card-stat">
-                                    <div class="report-card-stat-value">${report.seniorLeadershipVisits}</div>
-                                    <div class="report-card-stat-label">القيادة العليا</div>
+                                    <span class="report-card-stat-value">${report.seniorLeadershipVisits}</span>
+                                    <span class="report-card-stat-label">القيادة العليا</span>
                                 </div>
                                 <div class="report-card-stat">
-                                    <div class="report-card-stat-value">${report.middleLeadershipVisits}</div>
-                                    <div class="report-card-stat-label">القيادة الوسطى</div>
+                                    <span class="report-card-stat-value">${report.middleLeadershipVisits}</span>
+                                    <span class="report-card-stat-label">القيادة الوسطى</span>
                                 </div>
                                 <div class="report-card-stat">
-                                    <div class="report-card-stat-value">${report.totalClassVisits}</div>
-                                    <div class="report-card-stat-label">إجمالي الزيارات</div>
+                                    <span class="report-card-stat-value">${report.totalClassVisits}</span>
+                                    <span class="report-card-stat-label">إجمالي الزيارات</span>
                                 </div>
                             </div>
                         </div>
