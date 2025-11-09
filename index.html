@@ -403,6 +403,10 @@
             font-size: 0.9rem;
             transition: all 0.3s;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         .report-card-btn:hover {
@@ -411,6 +415,14 @@
 
         .report-card-btn.view {
             color: var(--primary);
+        }
+
+        .report-card-btn.edit {
+            color: var(--warning);
+        }
+
+        .report-card-btn.download {
+            color: var(--success);
         }
 
         .report-card-btn.delete {
@@ -427,6 +439,57 @@
             font-size: 3rem;
             margin-bottom: 1rem;
             color: #ddd;
+        }
+
+        /* نافذة المعاينة */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .preview-content {
+            background-color: white;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .close-btn:hover {
+            color: var(--dark);
         }
 
         @media (max-width: 768px) {
@@ -454,6 +517,20 @@
             .header-content {
                 flex-direction: column;
                 gap: 15px;
+            }
+            
+            .report-card-actions {
+                flex-wrap: wrap;
+            }
+            
+            .report-card-btn {
+                flex: 1 0 45%;
+                margin-bottom: 5px;
+            }
+            
+            .preview-content {
+                width: 95%;
+                padding: 1rem;
             }
         }
     </style>
@@ -649,6 +726,19 @@
         </div>
     </div>
 
+    <!-- نافذة المعاينة -->
+    <div id="previewModal" class="preview-modal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h2 class="preview-title">معاينة التقرير</h2>
+                <button class="close-btn" id="closePreview">&times;</button>
+            </div>
+            <div id="previewContent">
+                <!-- سيتم ملؤها بمحتوى التقرير -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // بيانات التقرير
         const qualityReportData = {
@@ -751,6 +841,9 @@
                 });
             }
 
+            // إعداد نافذة المعاينة
+            setupPreviewModal();
+
             // إعداد حقول الإدخال
             document.getElementById('seniorLeadershipVisits').addEventListener('change', updateQualityReport);
             document.getElementById('middleLeadershipVisits').addEventListener('change', updateQualityReport);
@@ -798,6 +891,24 @@
                         loadSavedReports();
                     }
                 });
+            });
+        }
+
+        // إعداد نافذة المعاينة
+        function setupPreviewModal() {
+            const modal = document.getElementById('previewModal');
+            const closeBtn = document.getElementById('closePreview');
+            
+            // إغلاق النافذة عند النقر على زر الإغلاق
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // إغلاق النافذة عند النقر خارج المحتوى
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
             });
         }
 
@@ -980,8 +1091,14 @@
                             </div>
                         </div>
                         <div class="report-card-actions">
-                            <button class="report-card-btn view" onclick="viewReport('${report.id}')">
-                                <i class="fas fa-eye"></i> عرض
+                            <button class="report-card-btn view" onclick="previewReport('${report.id}')">
+                                <i class="fas fa-eye"></i> معاينة
+                            </button>
+                            <button class="report-card-btn edit" onclick="editReport('${report.id}')">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="report-card-btn download" onclick="downloadSavedReport('${report.id}')">
+                                <i class="fas fa-file-word"></i> تحميل
                             </button>
                             <button class="report-card-btn delete" onclick="deleteReport('${report.id}')">
                                 <i class="fas fa-trash"></i> حذف
@@ -992,8 +1109,135 @@
             }).join('');
         }
 
-        // عرض تقرير محفوظ
-        function viewReport(reportId) {
+        // معاينة تقرير محفوظ
+        function previewReport(reportId) {
+            const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+            const report = savedReports.find(r => r.id === reportId);
+            
+            if (report) {
+                const previewContent = document.getElementById('previewContent');
+                const modal = document.getElementById('previewModal');
+                
+                // إنشاء محتوى المعاينة
+                previewContent.innerHTML = generatePreviewContent(report);
+                
+                // عرض نافذة المعاينة
+                modal.style.display = 'block';
+            }
+        }
+
+        // إنشاء محتوى المعاينة
+        function generatePreviewContent(report) {
+            let content = `
+                <div class="quality-report-header">
+                    <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
+                    <p class="quality-report-subtitle">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</p>
+                    <p class="quality-report-subtitle">شهر ${report.reportMonth}</p>
+                    <p class="quality-report-subtitle">العام الدراسي 2025 / 2026م</p>
+                </div>
+                
+                <div class="report-section">
+                    <h3 class="report-section-title">إحصائيات الزيارات</h3>
+                    <div class="form-group">
+                        <p><strong>عدد زيارات القيادة العليا:</strong> ${report.seniorLeadershipVisits}</p>
+                        <p><strong>عدد زيارات القيادة الوسطى:</strong> ${report.middleLeadershipVisits}</p>
+                        <p><strong>إجمالي الزيارات الصفية:</strong> ${report.totalClassVisits}</p>
+                    </div>
+                </div>
+            `;
+            
+            // قسم متابعة تسليم القيادة الوسطى
+            if (report.middleLeadership && report.middleLeadership.length > 0) {
+                content += `<div class="report-section">
+                    <h3 class="report-section-title">متابعة تسليم القيادة الوسطى</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>القسم</th>
+                                <th>عدد الزيارات</th>
+                                <th>محضر اجتماع</th>
+                                <th>خطة أسبوعية</th>
+                                <th>أسباب عدم التسليم</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                report.middleLeadership.forEach(item => {
+                    content += `<tr>
+                        <td>${item.department}</td>
+                        <td>${item.visits}</td>
+                        <td>${item.meeting}</td>
+                        <td>${item.plan}</td>
+                        <td>${item.reasons}</td>
+                    </tr>`;
+                });
+                
+                content += `</tbody></table></div>`;
+            }
+            
+            // قسم المعلمين المتميزين
+            if (report.distinguishedTeachers && report.distinguishedTeachers.length > 0) {
+                content += `<div class="report-section">
+                    <h3 class="report-section-title">المعلمين المتميزين</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>اسم المعلم</th>
+                                <th>التقدير</th>
+                                <th>المبررات</th>
+                                <th>القسم الأكاديمي</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                report.distinguishedTeachers.forEach((item, index) => {
+                    content += `<tr>
+                        <td>${index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.evaluation}</td>
+                        <td>${item.reasons}</td>
+                        <td>${item.department}</td>
+                    </tr>`;
+                });
+                
+                content += `</tbody></table></div>`;
+            }
+            
+            // قسم المعلمين الأولى بالرعاية
+            if (report.teachersNeedCare && report.teachersNeedCare.length > 0) {
+                content += `<div class="report-section">
+                    <h3 class="report-section-title">المعلمين الأولى بالرعاية</h3>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>اسم المعلم</th>
+                                <th>التقدير</th>
+                                <th>المبررات</th>
+                                <th>القسم الأكاديمي</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                report.teachersNeedCare.forEach((item, index) => {
+                    content += `<tr>
+                        <td>${index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.evaluation}</td>
+                        <td>${item.reasons}</td>
+                        <td>${item.department}</td>
+                    </tr>`;
+                });
+                
+                content += `</tbody></table></div>`;
+            }
+            
+            return content;
+        }
+
+        // تعديل تقرير محفوظ
+        function editReport(reportId) {
             const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
             const report = savedReports.find(r => r.id === reportId);
             
@@ -1017,8 +1261,288 @@
                 // الانتقال إلى صفحة إنشاء التقرير
                 document.querySelector('[data-tab="create-report"]').click();
                 
-                alert('تم تحميل التقرير بنجاح');
+                alert('تم تحميل التقرير للتعديل بنجاح');
             }
+        }
+
+        // تحميل تقرير محفوظ كملف Word
+        function downloadSavedReport(reportId) {
+            const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+            const report = savedReports.find(r => r.id === reportId);
+            
+            if (report) {
+                // استخدام نفس دالة إنشاء ملف Word ولكن مع البيانات المحفوظة
+                const reportContent = generateWordReportContentFromSaved(report);
+                
+                // إنشاء ملف Word باستخدام Blob
+                const blob = new Blob(['\uFEFF' + reportContent], { 
+                    type: 'application/msword;charset=utf-8' 
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `تقرير_جودة_التعليم_${report.reportMonth}.doc`;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                console.log('تم إنشاء ملف Word بنجاح');
+            }
+        }
+
+        // إنشاء محتوى Word للتقرير المحفوظ
+        function generateWordReportContentFromSaved(report) {
+            const currentDate = new Date().toLocaleDateString('ar-EG');
+            
+            let content = `
+            <!DOCTYPE html>
+            <html dir="rtl" lang="ar">
+            <head>
+                <meta charset="UTF-8">
+                <title>تقرير متابعة جودة التعليم والتعلم</title>
+                <style>
+                    body {
+                        font-family: 'Cairo', sans-serif;
+                        direction: rtl;
+                        line-height: 1.6;
+                        margin: 20px;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 30px;
+                        border-bottom: 2px solid #2c5aa0;
+                        padding-bottom: 15px;
+                    }
+                    .title {
+                        color: #2c5aa0;
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    .subtitle {
+                        color: #6c757d;
+                        font-size: 18px;
+                        margin-bottom: 5px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                    }
+                    th, td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        text-align: center;
+                    }
+                    th {
+                        background-color: #2c5aa0;
+                        color: white;
+                        font-weight: bold;
+                    }
+                    .section-title {
+                        color: #2c5aa0;
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin-top: 25px;
+                        margin-bottom: 15px;
+                        border-bottom: 1px solid #2c5aa0;
+                        padding-bottom: 5px;
+                    }
+                    .notes {
+                        font-style: italic;
+                        color: #6c757d;
+                        margin-top: 10px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</div>
+                    <div class="subtitle">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</div>
+                    <div class="subtitle">شهر ${report.reportMonth}</div>
+                    <div class="subtitle">العام الدراسي 2025 / 2026م</div>
+                    <div class="subtitle">إعداد المدير/ة المساعد/ة /يعتمد، مدير/ة المدرسة</div>
+                </div>
+            `;
+            
+            // قسم متابعة تسليم القيادة الوسطى
+            content += `<div class="section-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</div>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>القسم</th>
+                        <th>عدد استمارات الزيارات الصفية</th>
+                        <th>يوجد محضر اجتماع</th>
+                        <th>توجد خطة أسبوعية</th>
+                        <th>أسباب عدم التسليم</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.middleLeadership.forEach(item => {
+                content += `<tr>
+                    <td>${item.department}</td>
+                    <td>${item.visits}</td>
+                    <td>${item.meeting}</td>
+                    <td>${item.plan}</td>
+                    <td>${item.reasons}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            content += `<div class="notes">ملاحظات عامة: يتم التنسيق مع القيادة الوسطى لتنفيذ الزيارات الصفية بحسب ما يتناسب مع ظروف الجداول والنصاب المسند لهم.</div>`;
+            
+            // قسم عدد الزيارات
+            content += `<div class="section-title">ثانياً: عدد الزيارات التي نُفذت خلال شهر ${report.reportMonth} من قبل:</div>`;
+            content += `<p>1- القيادة العليا = ${report.seniorLeadershipVisits}</p>`;
+            content += `<p>2- القيادة الوسطى = ${report.middleLeadershipVisits}</p>`;
+            
+            // قسم أسماء المعلمين المُزارين
+            content += `<div class="section-title">ثالثاً: بيان أسماء المعلمين المُزارين من قبل القيادة العليا والوسطى خلال شهر ${report.reportMonth}</div>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>اسم المعلم</th>
+                        <th>القسم</th>
+                        <th>تاريخ الزيارة</th>
+                        <th>تقييم الزيارة</th>
+                        <th>اسم الزائر</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.teacherVisits.forEach((item, index) => {
+                content += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.teacher}</td>
+                    <td>${item.department}</td>
+                    <td>${item.date}</td>
+                    <td>${item.evaluation}</td>
+                    <td>${item.visitor}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            
+            // قسم عدد الزيارات الصفية وتقييم الأداء الصفي
+            content += `<div class="section-title">رابعاً: عدد الزيارات الصفية وتقييم الأداء الصفي</div>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>الأقسام الأكاديمية</th>
+                        <th>مجموع عدد الزيارات للقسم</th>
+                        <th>يفوق التوقعات بكثير</th>
+                        <th>يفوق التوقعات</th>
+                        <th>يفي بالتوقعات</th>
+                        <th>يفي بالتوقعات جزئياً</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.performance.forEach((item, index) => {
+                content += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.department}</td>
+                    <td>${item.total}</td>
+                    <td>${item.excellent}</td>
+                    <td>${item.veryGood}</td>
+                    <td>${item.good}</td>
+                    <td>${item.fair}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            content += `<p><strong>مجموع عدد الزيارات الصفية للقيادة العليا والوسطى:</strong> ${report.totalClassVisits}</p>`;
+            content += `<div class="notes">رسم بياني يوضح مجموع عدد الزيارات الصفية للقيادة العليا والوسطى</div>`;
+            
+            // قسم المعلمين المتميزين والأولى بالرعاية
+            content += `<div class="section-title">سادساً: حصر أسماء المعلمين المتميزين في الأقسام الأكاديمية</div>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>الرقم</th>
+                        <th>اسم المعلم</th>
+                        <th>التقدير</th>
+                        <th>المبررات</th>
+                        <th>القسم الأكاديمي</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.distinguishedTeachers.forEach((item, index) => {
+                content += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.evaluation}</td>
+                    <td>${item.reasons}</td>
+                    <td>${item.department}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            
+            content += `<div class="section-title">حصر أسماء المعلمين الأولى بالرعاية في الأقسام الأكاديمية</div>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>الرقم</th>
+                        <th>اسم المعلم</th>
+                        <th>التقدير</th>
+                        <th>المبررات</th>
+                        <th>القسم الأكاديمي</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.teachersNeedCare.forEach((item, index) => {
+                content += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.evaluation}</td>
+                    <td>${item.reasons}</td>
+                    <td>${item.department}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            
+            // قسم التقرير النوعي
+            content += `<div class="section-title">سابعاً: التقرير النوعي</div>`;
+            content += `<h4>جوانب القوة والتطوير لأداء المعلمين خلال الزيارات الصفية في الأقسام الأكاديمية</h4>`;
+            content += `<table>
+                <thead>
+                    <tr>
+                        <th>الأقسام الأكاديمية</th>
+                        <th>جوانب القوة</th>
+                        <th>جوانب بحاجة إلى تطوير</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            report.qualityReport.forEach(item => {
+                content += `<tr>
+                    <td>${item.department}</td>
+                    <td>${item.strengths}</td>
+                    <td>${item.improvements}</td>
+                </tr>`;
+            });
+            
+            content += `</tbody></table>`;
+            
+            // تذييل التقرير
+            content += `<div style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 15px;">
+                <p>تم إنشاء هذا التقرير بتاريخ ${currentDate}</p>
+                <p>إعداد المدير/ة المساعد/ة /يعتمد، مدير/ة المدرسة</p>
+            </div>`;
+            
+            content += `</body></html>`;
+            
+            return content;
         }
 
         // حذف تقرير محفوظ
