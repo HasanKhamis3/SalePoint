@@ -1363,8 +1363,8 @@
         }
 
         .logo-preview {
-            max-width: 200px;
-            max-height: 150px;
+            max-width: 300px; /* تم زيادة الحجم */
+            max-height: 200px; /* تم زيادة الحجم */
             margin: 0 auto 1rem;
             display: block;
         }
@@ -1425,8 +1425,14 @@
         }
 
         .ministry-logo {
-            max-width: 150px;
+            max-width: 300px; /* تم زيادة الحجم */
             margin: 0 auto 2rem;
+            display: block;
+        }
+
+        .school-stamp {
+            max-width: 150px;
+            margin: 1rem auto;
             display: block;
         }
 
@@ -1470,6 +1476,33 @@
             border-radius: 30px;
             display: inline-block;
             margin-bottom: 2rem;
+        }
+
+        /* فلتر التقارير المحفوظة */
+        .reports-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* تنسيق A4 للتقارير */
+        .a4-page {
+            width: 21cm;
+            min-height: 29.7cm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 2cm;
+            box-sizing: border-box;
         }
 
         /* Responsive */
@@ -1628,6 +1661,15 @@
                 flex-direction: column;
                 gap: 1.5rem;
             }
+
+            .a4-page {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .reports-filter {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -1717,11 +1759,12 @@
                             <div class="report-cover">
                                 <div class="report-cover-content">
                                     <img id="ministryLogoPreview" class="ministry-logo" src="" alt="شعار الوزارة" style="display: none;">
+                                    <img id="schoolStampPreview" class="school-stamp" src="" alt="ختم المدرسة" style="display: none;">
                                     <h1 class="report-cover-title">تقرير متابعة جودة التعليم والتعلم</h1>
                                     <h2 class="report-cover-subtitle">للقيادة العليا والوسطى</h2>
                                     <div class="report-cover-info" id="schoolNameCover">لمدرسة ___________________________</div>
                                     <div class="report-cover-info" id="reportMonthCoverText">شهر ____________</div>
-                                    <div class="report-cover-info">العام الدراسي / 2026م</div>
+                                    <div class="report-cover-info" id="academicYearCover">العام الدراسي / 2026م</div>
                                     
                                     <div class="report-cover-signatures">
                                         <div class="signature-box">
@@ -1893,6 +1936,36 @@
                                 <p class="quality-report-subtitle">عرض وإدارة التقارير المحفوظة سابقاً</p>
                             </div>
 
+                            <!-- فلتر التقارير -->
+                            <div class="reports-filter">
+                                <div class="filter-group">
+                                    <label for="filterMonth">فلتر حسب الشهر:</label>
+                                    <select id="filterMonth">
+                                        <option value="all">جميع الأشهر</option>
+                                        <option value="يناير">يناير</option>
+                                        <option value="فبراير">فبراير</option>
+                                        <option value="مارس">مارس</option>
+                                        <option value="أبريل">أبريل</option>
+                                        <option value="مايو">مايو</option>
+                                        <option value="يونيو">يونيو</option>
+                                        <option value="يوليو">يوليو</option>
+                                        <option value="أغسطس">أغسطس</option>
+                                        <option value="سبتمبر">سبتمبر</option>
+                                        <option value="أكتوبر">أكتوبر</option>
+                                        <option value="نوفمبر">نوفمبر</option>
+                                        <option value="ديسمبر">ديسمبر</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="sortReports">ترتيب حسب:</label>
+                                    <select id="sortReports">
+                                        <option value="newest">الأحدث أولاً</option>
+                                        <option value="oldest">الأقدم أولاً</option>
+                                        <option value="month">حسب الشهر</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div id="savedReportsContainer" class="saved-reports-container">
                                 <!-- سيتم ملؤها بالتقارير المحفوظة -->
                             </div>
@@ -1924,10 +1997,22 @@
                                 <div class="logo-upload-area" id="logoUploadArea">
                                     <i class="fas fa-cloud-upload-alt logo-upload-icon"></i>
                                     <p>انقر لتحميل شعار الوزارة</p>
-                                    <p class="report-notes">الحجم الموصى به: 150x150 بكسل</p>
+                                    <p class="report-notes">الحجم الموصى به: 300x200 بكسل</p>
                                     <img id="logoPreview" class="logo-preview" style="display: none;">
                                 </div>
                                 <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                            </div>
+
+                            <!-- إعدادات ختم المدرسة -->
+                            <div class="report-section">
+                                <h3 class="report-section-title">إعدادات ختم المدرسة</h3>
+                                <div class="logo-upload-area" id="stampUploadArea">
+                                    <i class="fas fa-cloud-upload-alt logo-upload-icon"></i>
+                                    <p>انقر لتحميل ختم المدرسة</p>
+                                    <p class="report-notes">الحجم الموصى به: 150x150 بكسل</p>
+                                    <img id="stampPreview" class="logo-preview" style="display: none;">
+                                </div>
+                                <input type="file" id="stampUpload" accept="image/*" style="display: none;">
                             </div>
 
                             <!-- إعدادات الغلاف -->
@@ -1936,6 +2021,11 @@
                                 <div class="form-group">
                                     <label for="schoolName">اسم المدرسة</label>
                                     <input type="text" id="schoolName" class="report-input" placeholder="أدخل اسم المدرسة">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="academicYear">العام الدراسي</label>
+                                    <input type="text" id="academicYear" class="report-input" placeholder="مثال: 2025 / 2026م">
                                 </div>
                                 
                                 <div class="form-group">
@@ -2572,10 +2662,12 @@
             // بيانات إعدادات التقرير
             reportSettings: {
                 schoolName: '',
+                academicYear: '2025 / 2026م',
                 schoolManagers: [],
                 assistantManagers: [],
                 visitors: [],
                 ministryLogo: '',
+                schoolStamp: '',
                 reportFooter: 'إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين'
             }
         };
@@ -2751,6 +2843,13 @@
             
             document.getElementById('logoUpload').addEventListener('change', handleLogoUpload);
             
+            // إعداد تحميل ختم المدرسة
+            document.getElementById('stampUploadArea').addEventListener('click', function() {
+                document.getElementById('stampUpload').click();
+            });
+            
+            document.getElementById('stampUpload').addEventListener('change', handleStampUpload);
+            
             // إعداد معاينة التذييل
             document.getElementById('reportFooter').addEventListener('input', updateFooterPreview);
             
@@ -2759,6 +2858,7 @@
             
             // تعبئة البيانات في النموذج
             document.getElementById('schoolName').value = appData.reportSettings.schoolName;
+            document.getElementById('academicYear').value = appData.reportSettings.academicYear;
             document.getElementById('reportFooter').value = appData.reportSettings.reportFooter;
             
             // عرض الشعار إذا كان موجوداً
@@ -2766,6 +2866,13 @@
                 document.getElementById('logoPreview').src = appData.reportSettings.ministryLogo;
                 document.getElementById('logoPreview').style.display = 'block';
                 document.getElementById('logoUploadArea').classList.add('active');
+            }
+            
+            // عرض ختم المدرسة إذا كان موجوداً
+            if (appData.reportSettings.schoolStamp) {
+                document.getElementById('stampPreview').src = appData.reportSettings.schoolStamp;
+                document.getElementById('stampPreview').style.display = 'block';
+                document.getElementById('stampUploadArea').classList.add('active');
             }
             
             // تحديث معاينة التذييل
@@ -2791,6 +2898,7 @@
         // حفظ إعدادات التقرير
         function saveReportSettings() {
             appData.reportSettings.schoolName = document.getElementById('schoolName').value;
+            appData.reportSettings.academicYear = document.getElementById('academicYear').value;
             appData.reportSettings.reportFooter = document.getElementById('reportFooter').value;
             
             try {
@@ -2813,6 +2921,22 @@
                 document.getElementById('logoPreview').src = e.target.result;
                 document.getElementById('logoPreview').style.display = 'block';
                 document.getElementById('logoUploadArea').classList.add('active');
+                saveReportSettings();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // معالجة تحميل ختم المدرسة
+        function handleStampUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                appData.reportSettings.schoolStamp = e.target.result;
+                document.getElementById('stampPreview').src = e.target.result;
+                document.getElementById('stampPreview').style.display = 'block';
+                document.getElementById('stampUploadArea').classList.add('active');
                 saveReportSettings();
             };
             reader.readAsDataURL(file);
@@ -3269,6 +3393,9 @@
             // تحديث اسم المدرسة في التقرير
             document.getElementById('schoolNameCover').textContent = `لمدرسة ${appData.reportSettings.schoolName || 'ــــــــــــــــــــــــــــــــــ'}`;
             
+            // تحديث العام الدراسي في التقرير
+            document.getElementById('academicYearCover').textContent = appData.reportSettings.academicYear;
+            
             // تحديث أسماء الموقعين
             if (appData.reportSettings.assistantManagers.length > 0) {
                 document.getElementById('assistantManagerName').textContent = appData.reportSettings.assistantManagers[0].name;
@@ -3291,6 +3418,12 @@
             if (appData.reportSettings.ministryLogo) {
                 document.getElementById('ministryLogoPreview').src = appData.reportSettings.ministryLogo;
                 document.getElementById('ministryLogoPreview').style.display = 'block';
+            }
+
+            // تحديث ختم المدرسة
+            if (appData.reportSettings.schoolStamp) {
+                document.getElementById('schoolStampPreview').src = appData.reportSettings.schoolStamp;
+                document.getElementById('schoolStampPreview').style.display = 'block';
             }
 
             // تحديث التذييل
@@ -3351,6 +3484,10 @@
             document.getElementById('seniorLeadershipVisits').addEventListener('change', updateQualityReport);
             document.getElementById('middleLeadershipVisits').addEventListener('change', updateQualityReport);
             document.getElementById('totalClassVisits').addEventListener('change', updateQualityReport);
+
+            // إعداد فلتر التقارير المحفوظة
+            document.getElementById('filterMonth').addEventListener('change', loadSavedQualityReports);
+            document.getElementById('sortReports').addEventListener('change', loadSavedQualityReports);
 
             // تحميل البيانات النموذجية تلقائياً
             loadQualityReportSampleData();
@@ -3413,7 +3550,12 @@
                     ...appData.qualityReportData,
                     id: reportId,
                     createdAt: new Date().toISOString(),
-                    reportMonth: document.getElementById('reportMonthCover').value || new Date().toLocaleDateString('ar-EG', { month: 'long' })
+                    reportMonth: document.getElementById('reportMonthCover').value || new Date().toLocaleDateString('ar-EG', { month: 'long' }),
+                    schoolName: appData.reportSettings.schoolName,
+                    academicYear: appData.reportSettings.academicYear,
+                    ministryLogo: appData.reportSettings.ministryLogo,
+                    schoolStamp: appData.reportSettings.schoolStamp,
+                    reportFooter: appData.reportSettings.reportFooter
                 };
                 
                 // الحصول على التقارير المحفوظة سابقاً
@@ -3463,8 +3605,31 @@
                 return;
             }
             
+            // تطبيق الفلتر والترتيب
+            const filterMonth = document.getElementById('filterMonth').value;
+            const sortBy = document.getElementById('sortReports').value;
+            
+            let filteredReports = savedReports;
+            
+            // تطبيق فلتر الشهر
+            if (filterMonth !== 'all') {
+                filteredReports = savedReports.filter(report => report.reportMonth === filterMonth);
+            }
+            
+            // تطبيق الترتيب
+            if (sortBy === 'newest') {
+                filteredReports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortBy === 'oldest') {
+                filteredReports.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            } else if (sortBy === 'month') {
+                const monthOrder = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                filteredReports.sort((a, b) => {
+                    return monthOrder.indexOf(a.reportMonth) - monthOrder.indexOf(b.reportMonth);
+                });
+            }
+            
             // عرض التقارير المحفوظة
-            container.innerHTML = savedReports.map(report => {
+            container.innerHTML = filteredReports.map(report => {
                 const date = new Date(report.createdAt).toLocaleDateString('ar-EG');
                 
                 return `
@@ -3528,21 +3693,22 @@
         // إنشاء محتوى المعاينة لتقرير الجودة
         function generateQualityPreviewContent(report) {
             let content = `
-                <div class="quality-report-header">
-                    <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
-                    <p class="quality-report-subtitle">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</p>
-                    <p class="quality-report-subtitle">شهر ${report.reportMonth}</p>
-                    <p class="quality-report-subtitle">العام الدراسي / 2026م</p>
-                </div>
-                
-                <div class="report-section">
-                    <h3 class="report-section-title">إحصائيات الزيارات</h3>
-                    <div class="form-group">
-                        <p><strong>عدد زيارات القيادة العليا:</strong> ${report.seniorLeadershipVisits}</p>
-                        <p><strong>عدد زيارات القيادة الوسطى:</strong> ${report.middleLeadershipVisits}</p>
-                        <p><strong>إجمالي الزيارات الصفية:</strong> ${report.totalClassVisits}</p>
+                <div class="a4-page">
+                    <div class="quality-report-header">
+                        <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
+                        <p class="quality-report-subtitle">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</p>
+                        <p class="quality-report-subtitle">شهر ${report.reportMonth}</p>
+                        <p class="quality-report-subtitle">${report.academicYear || 'العام الدراسي / 2026م'}</p>
                     </div>
-                </div>
+                    
+                    <div class="report-section">
+                        <h3 class="report-section-title">إحصائيات الزيارات</h3>
+                        <div class="form-group">
+                            <p><strong>عدد زيارات القيادة العليا:</strong> ${report.seniorLeadershipVisits}</p>
+                            <p><strong>عدد زيارات القيادة الوسطى:</strong> ${report.middleLeadershipVisits}</p>
+                            <p><strong>إجمالي الزيارات الصفية:</strong> ${report.totalClassVisits}</p>
+                        </div>
+                    </div>
             `;
             
             // قسم متابعة تسليم القيادة الوسطى
@@ -3631,6 +3797,8 @@
                 
                 content += `</tbody></table></div>`;
             }
+            
+            content += `</div>`;
             
             return content;
         }
@@ -3841,7 +4009,7 @@
                     <div class="cover-subtitle">للقيادة العليا والوسطى</div>
                     <div class="cover-info">لمدرسة ${appData.reportSettings.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</div>
                     <div class="cover-info">شهر ${currentMonth}</div>
-                    <div class="cover-info">العام الدراسي / 2026م</div>
+                    <div class="cover-info">${appData.reportSettings.academicYear || 'العام الدراسي / 2026م'}</div>
                 </div>
             `;
             
@@ -4123,7 +4291,7 @@
                     <div class="cover-subtitle">للقيادة العليا والوسطى</div>
                     <div class="cover-info">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</div>
                     <div class="cover-info">شهر ${report.reportMonth}</div>
-                    <div class="cover-info">العام الدراسي / 2026م</div>
+                    <div class="cover-info">${report.academicYear || 'العام الدراسي / 2026م'}</div>
                 </div>
             `;
             
@@ -4295,7 +4463,7 @@
             
             // تذييل التقرير
             content += `<div class="footer">
-                <p>${appData.reportSettings.reportFooter}</p>
+                <p>${report.reportFooter}</p>
                 <p>تم إنشاء هذا التقرير بتاريخ ${currentDate}</p>
             </div>`;
             
