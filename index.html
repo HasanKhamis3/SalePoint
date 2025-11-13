@@ -1694,6 +1694,7 @@
                     <!-- صفحة إنشاء التقرير -->
                     <div id="create-quality-report" class="quality-tab-content active">
                         <div class="quality-report-section">
+                            <!-- إطار تحديد الشهر -->
                             <div class="month-selector-cover">
                                 <label for="reportMonthCover">اختر الشهر:</label>
                                 <select id="reportMonthCover">
@@ -1720,7 +1721,7 @@
                                     <h2 class="report-cover-subtitle">للقيادة العليا والوسطى</h2>
                                     <div class="report-cover-info" id="schoolNameCover">لمدرسة ___________________________</div>
                                     <div class="report-cover-info" id="reportMonthCoverText">شهر ____________</div>
-                                    <div class="report-cover-info">العام الدراسي 2025 / 2026م</div>
+                                    <div class="report-cover-info">العام الدراسي / 2026م</div>
                                     
                                     <div class="report-cover-signatures">
                                         <div class="signature-box">
@@ -1734,9 +1735,12 @@
                                             <div id="schoolManagerName">___________________________</div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="report-cover-info" id="reportFooterCover" style="margin-top: 3rem; font-size: 1rem; opacity: 0.8;"></div>
                                 </div>
                             </div>
 
+                            <!-- باقي محتوى التقرير -->
                             <!-- أولاً: متابعة تسليم القيادة الوسطى -->
                             <div class="report-section">
                                 <h3 class="report-section-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</h3>
@@ -2572,7 +2576,7 @@
                 assistantManagers: [],
                 visitors: [],
                 ministryLogo: '',
-                reportFooter: 'إعداد المدير/ة المساعد/ة /يعتمد، مدير/ة المدرسة'
+                reportFooter: 'إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين'
             }
         };
 
@@ -3289,6 +3293,9 @@
                 document.getElementById('ministryLogoPreview').style.display = 'block';
             }
 
+            // تحديث التذييل
+            document.getElementById('reportFooterCover').textContent = appData.reportSettings.reportFooter;
+
             // تحديث اختيار الشهر
             document.getElementById('reportMonthCover').addEventListener('change', function() {
                 const selectedMonth = this.value;
@@ -3525,7 +3532,7 @@
                     <h2 class="quality-report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h2>
                     <p class="quality-report-subtitle">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</p>
                     <p class="quality-report-subtitle">شهر ${report.reportMonth}</p>
-                    <p class="quality-report-subtitle">العام الدراسي 2025 / 2026م</p>
+                    <p class="quality-report-subtitle">العام الدراسي / 2026م</p>
                 </div>
                 
                 <div class="report-section">
@@ -3834,7 +3841,7 @@
                     <div class="cover-subtitle">للقيادة العليا والوسطى</div>
                     <div class="cover-info">لمدرسة ${appData.reportSettings.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</div>
                     <div class="cover-info">شهر ${currentMonth}</div>
-                    <div class="cover-info">العام الدراسي 2025 / 2026م</div>
+                    <div class="cover-info">العام الدراسي / 2026م</div>
                 </div>
             `;
             
@@ -4116,7 +4123,7 @@
                     <div class="cover-subtitle">للقيادة العليا والوسطى</div>
                     <div class="cover-info">لمدرسة ${report.schoolName || 'ــــــــــــــــــــــــــــــــــ'}</div>
                     <div class="cover-info">شهر ${report.reportMonth}</div>
-                    <div class="cover-info">العام الدراسي 2025 / 2026م</div>
+                    <div class="cover-info">العام الدراسي / 2026م</div>
                 </div>
             `;
             
