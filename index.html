@@ -2039,8 +2039,8 @@
                                 <button class="btn btn-secondary" id="downloadWordReport">
                                     <i class="fas fa-file-word"></i> تحميل كملف Word
                                 </button>
-                                <button class="btn" onclick="autoFillFromSystem()">تعبئة تلقائية من النظام</button>
-                                <button class="btn" onclick="generateCharts()">تحديث الرسوم البيانية</button>
+                                <button class="btn" id="autoFillBtn">تعبئة تلقائية من النظام</button>
+                                <button class="btn" id="generateChartsBtn">تحديث الرسوم البيانية</button>
                             </div>
                         </div>
                     </div>
@@ -2892,21 +2892,31 @@
             // إعداد أزرار التحميل مع تأثيرات الضغط
             const wordBtn = document.getElementById('downloadWordReport');
             const saveBtn = document.getElementById('saveQualityReport');
+            const autoFillBtn = document.getElementById('autoFillBtn');
+            const generateChartsBtn = document.getElementById('generateChartsBtn');
 
-            // إزالة أي مستمعي أحداث سابقين لمنع التكرار
+            // إعداد مستمعي الأحداث للأزرار
             if (wordBtn) {
-                const newWordBtn = wordBtn.cloneNode(true);
-                wordBtn.parentNode.replaceChild(newWordBtn, wordBtn);
-                newWordBtn.addEventListener('click', function(e) {
+                wordBtn.addEventListener('click', function(e) {
                     showLoadingEffect(e.target, downloadWordReport);
                 });
             }
 
             if (saveBtn) {
-                const newSaveBtn = saveBtn.cloneNode(true);
-                saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-                newSaveBtn.addEventListener('click', function(e) {
+                saveBtn.addEventListener('click', function(e) {
                     showLoadingEffect(e.target, saveQualityReport);
+                });
+            }
+
+            if (autoFillBtn) {
+                autoFillBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, autoFillFromSystem);
+                });
+            }
+
+            if (generateChartsBtn) {
+                generateChartsBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, generateCharts);
                 });
             }
 
@@ -3811,9 +3821,6 @@
             }, 1500); // 1.5 ثانية محاكاة للتصوير
         }
 
-        // باقي دوال النظام (إدارة المستخدمين، إعدادات التقرير، إلخ)
-        // ... [يتم الاحتفاظ بجميع الدوال الأخرى كما هي في الكود الأصلي]
-
         // معالج تسجيل الدخول
         function handleLogin(e) {
             e.preventDefault();
@@ -3880,16 +3887,452 @@
 
         // إعداد أقسام إدارة المستخدمين
         function setupUserManagement() {
-            // ... [يتم الاحتفاظ بجميع دوال إدارة المستخدمين كما هي]
+            // إعداد علامات التبويب الفرعية
+            document.querySelectorAll('.user-sub-tabs a').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // إزالة النشاط من جميع الأزرار
+                    document.querySelectorAll('.user-sub-tabs a').forEach(t => t.classList.remove('active'));
+                    
+                    // إضافة النشاط للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع الأقسام
+                    document.querySelectorAll('.user-management-section').forEach(section => section.classList.remove('active'));
+                    
+                    // إظهار القسم المحدد
+                    const sectionId = this.getAttribute('data-user-section');
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+            
+            // إعداد أزرار إضافة المستخدمين
+            document.getElementById('addSeniorLeadership').addEventListener('click', function() {
+                openUserModal('senior_leadership');
+            });
+            
+            document.getElementById('addMiddleLeadership').addEventListener('click', function() {
+                openUserModal('middle_leadership');
+            });
+            
+            document.getElementById('addTeacher').addEventListener('click', function() {
+                openUserModal('teacher');
+            });
+            
+            // إعداد أزرار إضافة الأقسام
+            document.getElementById('addDepartment').addEventListener('click', function() {
+                openDepartmentModal();
+            });
+            
+            // إعداد أزرار إعدادات التقرير
+            document.getElementById('addSchoolManager').addEventListener('click', function() {
+                openReportSettingsModal('schoolManager');
+            });
+            
+            document.getElementById('addAssistantManager').addEventListener('click', function() {
+                openReportSettingsModal('assistantManager');
+            });
+            
+            document.getElementById('addVisitor').addEventListener('click', function() {
+                openReportSettingsModal('visitor');
+            });
+            
+            // إعداد زر حفظ إعدادات التقرير
+            document.getElementById('saveReportSettings').addEventListener('click', function(e) {
+                showLoadingEffect(e.target, saveReportSettings);
+            });
+            
+            // إعداد أزرار الشعارات
+            document.getElementById('logoUploadArea').addEventListener('click', function() {
+                document.getElementById('logoUpload').click();
+            });
+            
+            document.getElementById('stampUploadArea').addEventListener('click', function() {
+                document.getElementById('stampUpload').click();
+            });
+            
+            // إعداد مستمعي الأحداث لرفع الملفات
+            document.getElementById('logoUpload').addEventListener('change', handleLogoUpload);
+            document.getElementById('stampUpload').addEventListener('change', handleStampUpload);
+            
+            // إعداد مستمعي الأحداث للحقول
+            document.getElementById('schoolName').addEventListener('input', updateReportCover);
+            document.getElementById('academicYear').addEventListener('input', updateReportCover);
+            document.getElementById('reportFooter').addEventListener('input', updateReportFooter);
         }
 
         // إعداد قسم إعدادات التقرير
         function setupReportSettings() {
-            // ... [يتم الاحتفاظ بجميع دوال إعدادات التقرير كما هي]
+            // إعداد علامات التبويب
+            document.querySelectorAll('.settings-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // إزالة النشاط من جميع الأزرار
+                    document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+                    
+                    // إضافة النشاط للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع المحتويات
+                    document.querySelectorAll('.settings-tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    // إظهار المحتوى المحدد
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
         }
 
-        // دوال إدارة المستخدمين وإعدادات التقرير الأخرى
-        // ... [يتم الاحتفاظ بجميع الدوال الأخرى كما هي في الكود الأصلي]
+        // عرض إعدادات التقرير
+        function renderReportSettings() {
+            // تعبئة الحقول
+            document.getElementById('schoolName').value = appData.reportSettings.schoolName;
+            document.getElementById('academicYear').value = appData.reportSettings.academicYear;
+            document.getElementById('reportFooter').value = appData.reportSettings.reportFooter;
+            
+            // تعبئة الجداول
+            renderSchoolManagersTable();
+            renderAssistantManagersTable();
+            renderVisitorsTable();
+            
+            // تحديث معاينة التذييل
+            document.getElementById('footerPreview').textContent = appData.reportSettings.reportFooter;
+        }
+
+        // عرض جدول مديري المدرسة
+        function renderSchoolManagersTable() {
+            const tbody = document.getElementById('schoolManagersTable');
+            tbody.innerHTML = '';
+            
+            appData.reportSettings.schoolManagers.forEach((manager, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${manager.name}</td>
+                    <td>
+                        <button class="btn btn-xs btn-warning" onclick="editReportSetting('schoolManager', ${index})">تعديل</button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteReportSetting('schoolManager', ${index})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // عرض جدول المديرين المساعدين
+        function renderAssistantManagersTable() {
+            const tbody = document.getElementById('assistantManagersTable');
+            tbody.innerHTML = '';
+            
+            appData.reportSettings.assistantManagers.forEach((manager, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${manager.name}</td>
+                    <td>
+                        <button class="btn btn-xs btn-warning" onclick="editReportSetting('assistantManager', ${index})">تعديل</button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteReportSetting('assistantManager', ${index})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // عرض جدول الزوار
+        function renderVisitorsTable() {
+            const tbody = document.getElementById('visitorsTable');
+            tbody.innerHTML = '';
+            
+            appData.reportSettings.visitors.forEach((visitor, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${visitor.name}</td>
+                    <td>${visitor.role}</td>
+                    <td>
+                        <button class="btn btn-xs btn-warning" onclick="editReportSetting('visitor', ${index})">تعديل</button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteReportSetting('visitor', ${index})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // فتح نافذة إعدادات التقرير
+        function openReportSettingsModal(type) {
+            const modal = document.getElementById('reportSettingsModal');
+            const title = document.getElementById('reportSettingsModalTitle');
+            const form = document.getElementById('reportSettingsForm');
+            const roleGroup = document.getElementById('settingRoleGroup');
+            
+            // إعداد النافذة حسب النوع
+            switch(type) {
+                case 'schoolManager':
+                    title.textContent = 'إضافة مدير/ة المدرسة';
+                    roleGroup.style.display = 'none';
+                    break;
+                case 'assistantManager':
+                    title.textContent = 'إضافة مدير/ة مساعد/ة';
+                    roleGroup.style.display = 'none';
+                    break;
+                case 'visitor':
+                    title.textContent = 'إضافة زائر';
+                    roleGroup.style.display = 'block';
+                    break;
+            }
+            
+            // إعداد النموذج
+            form.reset();
+            document.getElementById('settingId').value = '';
+            document.getElementById('settingType').value = type;
+            
+            // عرض النافذة
+            modal.style.display = 'flex';
+        }
+
+        // حفظ إعدادات التقرير
+        function saveReportSettings() {
+            // جمع البيانات
+            appData.reportSettings.schoolName = document.getElementById('schoolName').value;
+            appData.reportSettings.academicYear = document.getElementById('academicYear').value;
+            appData.reportSettings.reportFooter = document.getElementById('reportFooter').value;
+            
+            // حفظ البيانات
+            saveDataToStorage();
+            
+            // تحديث الغلاف
+            updateReportCover();
+            
+            alert('تم حفظ الإعدادات بنجاح');
+        }
+
+        // تحديث غلاف التقرير
+        function updateReportCover() {
+            document.getElementById('schoolNameCover').textContent = `لمدرسة ${appData.reportSettings.schoolName || 'ــــــــــــــــــــــــــــــــــ'}`;
+            document.getElementById('academicYearCover').textContent = appData.reportSettings.academicYear;
+        }
+
+        // تحديث تذييل التقرير
+        function updateReportFooter() {
+            const footerText = document.getElementById('reportFooter').value;
+            document.getElementById('footerPreview').textContent = footerText;
+            document.getElementById('reportFooterCover').textContent = footerText;
+        }
+
+        // معالجة رفع الشعار
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.reportSettings.ministryLogo = e.target.result;
+                    document.getElementById('logoPreview').src = e.target.result;
+                    document.getElementById('logoPreview').style.display = 'block';
+                    document.getElementById('ministryLogoPreview').src = e.target.result;
+                    document.getElementById('ministryLogoPreview').style.display = 'block';
+                    saveDataToStorage();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // معالجة رفع الختم
+        function handleStampUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.reportSettings.schoolStamp = e.target.result;
+                    document.getElementById('stampPreview').src = e.target.result;
+                    document.getElementById('stampPreview').style.display = 'block';
+                    document.getElementById('schoolStampPreview').src = e.target.result;
+                    document.getElementById('schoolStampPreview').style.display = 'block';
+                    saveDataToStorage();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // دوال إدارة المستخدمين الأساسية
+        function openUserModal(role) {
+            const modal = document.getElementById('userModal');
+            const title = document.getElementById('userModalTitle');
+            
+            // إعداد النافذة حسب الدور
+            switch(role) {
+                case 'senior_leadership':
+                    title.textContent = 'إضافة عضو في القيادة العليا';
+                    document.getElementById('userPositionLabel').textContent = 'الوظيفة';
+                    document.getElementById('userPhoneGroup').style.display = 'block';
+                    break;
+                case 'middle_leadership':
+                    title.textContent = 'إضافة عضو في القيادة الوسطى';
+                    document.getElementById('userPositionLabel').textContent = 'الوظيفة';
+                    document.getElementById('userPhoneGroup').style.display = 'block';
+                    break;
+                case 'teacher':
+                    title.textContent = 'إضافة معلمة';
+                    document.getElementById('userPositionLabel').textContent = 'القسم';
+                    document.getElementById('userPhoneGroup').style.display = 'none';
+                    break;
+            }
+            
+            // إعداد النموذج
+            document.getElementById('userForm').reset();
+            document.getElementById('userId').value = '';
+            document.getElementById('userRole').value = role;
+            
+            // عرض النافذة
+            modal.style.display = 'flex';
+        }
+
+        function renderUserManagementTable(role) {
+            // محاكاة عرض بيانات المستخدمين
+            const tableBody = document.getElementById(role + 'Table');
+            if (tableBody) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px;">
+                            <i class="fas fa-users" style="font-size: 2rem; color: #ddd; margin-bottom: 10px;"></i>
+                            <p>لا توجد بيانات متاحة</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function renderDepartmentsTable() {
+            const tbody = document.getElementById('departmentsTable');
+            tbody.innerHTML = '';
+            
+            appData.departments.forEach((dept, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${dept.name}</td>
+                    <td>
+                        <span class="status-badge ${dept.status === 'active' ? 'status-active' : 'status-inactive'}">
+                            ${dept.status === 'active' ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-xs btn-warning" onclick="editDepartment(${dept.id})">تعديل</button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteDepartment(${dept.id})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function openDepartmentModal() {
+            const modal = document.getElementById('departmentModal');
+            const title = document.getElementById('departmentModalTitle');
+            
+            title.textContent = 'إضافة قسم جديد';
+            document.getElementById('departmentForm').reset();
+            document.getElementById('departmentId').value = '';
+            
+            modal.style.display = 'flex';
+        }
+
+        // دوال إغلاق النوافذ
+        function closePermissionsModal() {
+            document.getElementById('permissionsModal').style.display = 'none';
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // دوال مساعدة
+        function savePermissions() {
+            alert('تم حفظ الصلاحيات بنجاح');
+            closePermissionsModal();
+        }
+
+        function editDepartment(id) {
+            const dept = appData.departments.find(d => d.id === id);
+            if (dept) {
+                const modal = document.getElementById('departmentModal');
+                const title = document.getElementById('departmentModalTitle');
+                
+                title.textContent = 'تعديل القسم';
+                document.getElementById('departmentId').value = dept.id;
+                document.getElementById('departmentName').value = dept.name;
+                document.getElementById('departmentStatus').value = dept.status;
+                
+                modal.style.display = 'flex';
+            }
+        }
+
+        function deleteDepartment(id) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذا القسم؟')) {
+                appData.departments = appData.departments.filter(d => d.id !== id);
+                renderDepartmentsTable();
+                saveDataToStorage();
+                alert('تم حذف القسم بنجاح');
+            }
+        }
+
+        function editReportSetting(type, index) {
+            const modal = document.getElementById('reportSettingsModal');
+            const title = document.getElementById('reportSettingsModalTitle');
+            const form = document.getElementById('reportSettingsForm');
+            const roleGroup = document.getElementById('settingRoleGroup');
+            
+            let item;
+            switch(type) {
+                case 'schoolManager':
+                    title.textContent = 'تعديل مدير/ة المدرسة';
+                    roleGroup.style.display = 'none';
+                    item = appData.reportSettings.schoolManagers[index];
+                    break;
+                case 'assistantManager':
+                    title.textContent = 'تعديل مدير/ة مساعد/ة';
+                    roleGroup.style.display = 'none';
+                    item = appData.reportSettings.assistantManagers[index];
+                    break;
+                case 'visitor':
+                    title.textContent = 'تعديل زائر';
+                    roleGroup.style.display = 'block';
+                    item = appData.reportSettings.visitors[index];
+                    break;
+            }
+            
+            // تعبئة النموذج
+            form.reset();
+            document.getElementById('settingId').value = index;
+            document.getElementById('settingType').value = type;
+            document.getElementById('settingName').value = item.name;
+            
+            if (type === 'visitor') {
+                document.getElementById('settingRole').value = item.role;
+            }
+            
+            // عرض النافذة
+            modal.style.display = 'flex';
+        }
+
+        function deleteReportSetting(type, index) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذا العنصر؟')) {
+                switch(type) {
+                    case 'schoolManager':
+                        appData.reportSettings.schoolManagers.splice(index, 1);
+                        renderSchoolManagersTable();
+                        break;
+                    case 'assistantManager':
+                        appData.reportSettings.assistantManagers.splice(index, 1);
+                        renderAssistantManagersTable();
+                        break;
+                    case 'visitor':
+                        appData.reportSettings.visitors.splice(index, 1);
+                        renderVisitorsTable();
+                        break;
+                }
+                
+                saveDataToStorage();
+                alert('تم حذف العنصر بنجاح');
+            }
+        }
     </script>
 </body>
 </html>
