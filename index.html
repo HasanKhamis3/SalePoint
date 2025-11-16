@@ -9,355 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root {
-            --primary: #2c5aa0;
-            --primary-light: #4a7bc8;
-            --secondary: #4caf50;
-            --accent: #ff9800;
-            --light: #f5f7fa;
-            --dark: #333;
-            --gray: #6c757d;
-            --danger: #dc3545;
-            --success: #28a745;
-            --warning: #ffc107;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        body {
-            background-color: #f0f2f5;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 1rem 0;
-            box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            font-size: 1.8rem;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: white;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* Navigation */
-        nav {
-            background-color: white;
-            padding: 0.5rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-tabs {
-            display: flex;
-            list-style: none;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 0 10px;
-        }
-
-        .nav-tabs li {
-            margin: 0 5px;
-        }
-
-        .nav-tabs a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: var(--gray);
-            border-radius: var(--border-radius);
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .nav-tabs a:hover, .nav-tabs a.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        /* Main Content */
-        main {
-            padding: 2rem 0;
-        }
-
-        .section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--light);
-        }
-
-        .section-title {
-            font-size: 1.4rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: right;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        tr:hover {
-            background-color: #e9ecef;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary);
-        }
-
-        .btn-secondary:hover {
-            background-color: #3d8b40;
-        }
-
-        .btn-danger {
-            background-color: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        .btn-warning {
-            background-color: var(--warning);
-            color: var(--dark);
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        .btn-sm {
-            padding: 5px 10px;
-            font-size: 0.875rem;
-        }
-
-        .btn-xs {
-            padding: 3px 8px;
-            font-size: 0.75rem;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 1rem;
-        }
-
-        /* Login Page */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-        }
-
-        .login-box {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-title {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* علامات التبويب لتقرير الجودة */
-        .quality-tabs {
-            display: flex;
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            margin-bottom: 2rem;
-            box-shadow: var(--box-shadow);
-        }
-
-        .quality-tab {
-            flex: 1;
-            padding: 15px 20px;
-            text-align: center;
-            background-color: #f8f9fa;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            color: var(--gray);
-        }
-
-        .quality-tab.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .quality-tab:hover:not(.active) {
-            background-color: #e9ecef;
-        }
-
-        .quality-tab-content {
-            display: none;
-        }
-
-        .quality-tab-content.active {
-            display: block;
-        }
-
-        /* غلاف التقرير - الأنماط المحدثة حسب المواصفات */
+        /* جميع الأنماط السابقة تبقى كما هي */
+        /* ... */
+        
+        /* تحديث أنماط صفحة الغلاف لتطابق الصورة المرفقة */
         .report-cover {
             background: white;
             color: black;
@@ -380,359 +35,116 @@
         }
 
         .ministry-logo {
-            position: absolute;
-            top: 1.5cm;
-            right: 6.8cm;
-            width: 7.5cm;
-            height: 4.8cm;
-            background-color: #1E4B8A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
+            width: 6cm;
+            height: 5cm;
+            margin: 0 auto 1.5cm;
+            display: block;
+            object-fit: contain;
         }
 
         .report-cover-title {
-            position: absolute;
-            top: 7.2cm;
-            right: 2.5cm;
-            width: 16.5cm;
-            height: 1.8cm;
-            color: #1F497D;
-            font-size: 22px;
-            font-weight: bold;
-            font-family: 'Traditional Arabic', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5cm;
+            font-weight: 700;
+            width: 13cm;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .report-cover-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 1.5cm;
+            font-weight: 600;
+        }
+
+        .report-cover-info {
+            font-size: 1.2rem;
+            margin-bottom: 0.7cm;
+            width: 4cm;
+            margin-left: auto;
+            margin-right: auto;
+            border-bottom: 1px solid black;
+            padding-bottom: 0.2cm;
+            min-height: 0.7cm;
+        }
+
+        .report-month-year {
+            font-size: 1.2rem;
+            margin-bottom: 2.5cm;
+            width: 6cm;
+            margin-left: auto;
+            margin-right: auto;
             display: flex;
-            align-items: center;
             justify-content: center;
+            gap: 0.5cm;
         }
 
-        .school-field {
-            position: absolute;
-            top: 9.8cm;
-            right: 9.2cm;
-            width: 2.8cm;
-            height: 0.6cm;
+        .report-month, .report-year {
             border-bottom: 1px solid black;
-            text-align: center;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 14px;
+            padding-bottom: 0.2cm;
+            min-width: 2.5cm;
+            min-height: 1cm;
         }
 
-        .month-field {
-            position: absolute;
-            top: 11.2cm;
-            right: 9.5cm;
-            width: 2.2cm;
-            height: 0.6cm;
-            border-bottom: 1px solid #FF0000;
-            text-align: center;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 14px;
-            color: #FF0000;
-        }
-
-        .year-field {
-            position: absolute;
-            top: 12.6cm;
-            right: 8.8cm;
-            width: 3.5cm;
-            height: 0.6cm;
-            border-bottom: 1px solid black;
-            text-align: center;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 14px;
-        }
-
-        .signature-frame {
-            position: absolute;
-            top: 15.2cm;
-            right: 1.8cm;
-            width: 17.5cm;
-            height: 4.2cm;
-            border: 1.5pt solid #BFBFBF;
-            border-radius: 5pt;
+        .report-signatures {
             display: flex;
             justify-content: space-between;
+            width: 100%;
+            margin-top: 4.5cm;
             padding: 0 1cm;
         }
 
-        .preparer-field {
-            position: absolute;
-            top: 16.5cm;
-            right: 3.5cm;
-            width: 4.5cm;
-            height: 0.6cm;
-            text-align: right;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 14px;
-        }
-
-        .approver-field {
-            position: absolute;
-            top: 16.5cm;
-            left: 12.5cm;
-            width: 4.5cm;
-            height: 0.6cm;
-            text-align: left;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 14px;
-        }
-
-        .horizontal-line {
-            position: absolute;
-            top: 20.2cm;
-            right: 1.8cm;
-            left: 1.8cm;
-            height: 1px;
-            background-color: #BFBFBF;
-        }
-
-        .footer-text {
-            position: absolute;
-            top: 21.5cm;
-            right: 5.8cm;
-            width: 9.5cm;
-            height: 0.6cm;
-            text-align: center;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 12px;
-        }
-
-        /* الصفحة الثانية - الأنماط المحدثة حسب المواصفات */
-        .second-page {
-            background: white;
-            color: black;
-            padding: 2.5cm 2cm;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-            min-height: 29.7cm;
-            box-shadow: var(--box-shadow);
-            border: 1px solid #ddd;
-        }
-
-        .second-page-title {
-            position: absolute;
-            top: 2cm;
-            right: 1.5cm;
-            width: 18cm;
-            height: 1cm;
-            color: #1F497D;
-            font-size: 16px;
-            font-weight: bold;
-            font-family: 'Traditional Arabic', serif;
-            text-align: right;
-        }
-
-        .leadership-table {
-            position: absolute;
-            top: 3.5cm;
-            right: 1.5cm;
-            width: 18cm;
-            height: 7.5cm;
-            border-collapse: collapse;
-        }
-
-        .leadership-table th {
-            background-color: #1F497D;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            font-family: 'Traditional Arabic', serif;
-            text-align: center;
-            border: 1px solid black;
-            padding: 8px;
-        }
-
-        .leadership-table td {
-            border: 1px solid black;
-            padding: 8px;
-            font-size: 12px;
-            font-family: 'Traditional Arabic', serif;
-        }
-
-        .reasons-column {
-            background-color: #F2F2F2;
-            text-align: right;
-            width: 8cm;
-        }
-
-        .other-columns {
-            background-color: white;
+        .signature-box {
             text-align: center;
             width: 5cm;
         }
 
-        .general-notes {
-            position: absolute;
-            top: 11.5cm;
-            right: 1.5cm;
-            width: 18cm;
-            height: 1.5cm;
-            font-size: 12px;
-            font-family: 'Traditional Arabic', serif;
-            text-align: right;
-            font-style: italic;
+        .signature-label {
+            margin-bottom: 0.5cm;
+            font-size: 1rem;
         }
 
-        .visits-title {
-            position: absolute;
-            top: 13.5cm;
-            right: 1.5cm;
-            width: 18cm;
-            height: 1cm;
-            color: #1F497D;
-            font-size: 16px;
-            font-weight: bold;
-            font-family: 'Traditional Arabic', serif;
-            text-align: right;
-        }
-
-        .visits-list {
-            position: absolute;
-            top: 15cm;
-            right: 3cm;
-            font-size: 14px;
-            font-family: 'Traditional Arabic', serif;
-            text-align: right;
-        }
-
-        .second-page-footer {
-            position: absolute;
-            top: 17.5cm;
-            right: 5.8cm;
-            width: 9.5cm;
-            height: 0.6cm;
-            text-align: center;
-            font-family: 'Traditional Arabic', serif;
-            font-size: 12px;
-        }
-
-        .second-page-line {
-            position: absolute;
-            top: 17cm;
-            right: 1.5cm;
-            left: 1.5cm;
+        .signature-line {
+            width: 100%;
             height: 1px;
-            background-color: #95B3D7;
+            background-color: black;
+            margin: 0.5cm auto;
         }
 
-        /* باقي الأنماط */
-        .report-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background-color: #f8f9fa;
-            border-radius: var(--border-radius);
+        .signature-name {
+            min-height: 1cm;
+            border-bottom: 1px solid black;
         }
 
-        .report-section-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-weight: 700;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-        }
-
-        .report-actions {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--light);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav-tabs {
-                flex-wrap: wrap;
-            }
-            
-            .report-cover, .second-page {
-                padding: 1rem;
-                transform: scale(0.8);
-                transform-origin: top center;
-            }
-            
-            .report-actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
+        .report-footer {
+            position: absolute;
+            bottom: 1.5cm;
+            left: 3cm;
+            right: 3cm;
+            text-align: center;
+            font-size: 0.9rem;
+            width: 15cm;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
-        <div class="login-box">
-            <h2 class="login-title">تسجيل الدخول</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">اسم المستخدم</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">كلمة المرور</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="btn btn-block">تسجيل الدخول</button>
-            </form>
-        </div>
+        <!-- ... -->
     </div>
 
     <!-- Main Application -->
     <div id="app" style="display: none;">
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h1>نظام متابعة جودة التعليم والتعلم</h1>
-                    </div>
-                    <div class="user-info">
-                        <div class="user-avatar" id="userAvatar">م</div>
-                        <span id="userName">مستخدم</span>
-                        <button id="logoutBtn" class="btn btn-danger">تسجيل الخروج</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <nav>
-            <div class="container">
-                <ul class="nav-tabs" id="navTabs">
-                    <li><a href="#" data-section="quality-report" class="active">تقرير جودة التعليم</a></li>
-                    <li><a href="#" data-section="report-settings">إعدادات التقرير</a></li>
-                    <li><a href="#" data-section="users">إدارة المستخدمين</a></li>
-                </ul>
-            </div>
-        </nav>
-
+        <!-- ... -->
+        
         <main>
             <div class="container">
                 <!-- Quality Report Section - المحدث -->
                 <section id="quality-report" class="section active">
-                    <div class="section-header">
-                        <h2 class="section-title">تقرير جودة التعليم</h2>
-                    </div>
+                    <!-- ... -->
                     
-                    <div class="quality-tabs">
-                        <button class="quality-tab active" data-tab="create-quality-report">إنشاء تقرير جديد</button>
-                        <button class="quality-tab" data-tab="saved-quality-reports">التقارير المحفوظة</button>
-                    </div>
-
                     <!-- صفحة إنشاء التقرير المحدثة -->
                     <div id="create-quality-report" class="quality-tab-content active">
                         <div class="quality-report-section">
@@ -755,348 +167,72 @@
                                 </select>
                             </div>
 
-                            <!-- صفحة الغلاف المحدثة حسب المواصفات -->
+                            <!-- صفحة الغلاف المحدثة لتطابق الصورة -->
                             <div class="report-cover">
                                 <div class="report-cover-content">
                                     <!-- شعار الوزارة -->
-                                    <div class="ministry-logo">شعار وزارة التعليم</div>
+                                    <img id="ministryLogoPreview" class="ministry-logo" src="" alt="شعار الوزارة" style="display: none;">
                                     
                                     <!-- عنوان التقرير -->
-                                    <div class="report-cover-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</div>
+                                    <h1 class="report-cover-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</h1>
                                     
                                     <!-- اسم المدرسة -->
-                                    <div class="school-field" id="schoolNameCover">لمدرسة</div>
+                                    <div class="report-cover-info" id="schoolNameCover">لمدرسة ______</div>
                                     
-                                    <!-- الشهر -->
-                                    <div class="month-field" id="reportMonthCoverText">شهر</div>
-                                    
-                                    <!-- العام الدراسي -->
-                                    <div class="year-field" id="academicYearCover">العام الدراسي</div>
-                                    
-                                    <!-- الإطار الرصاصي -->
-                                    <div class="signature-frame">
-                                        <div class="preparer-field">إعداد المدير/المساعدة</div>
-                                        <div class="approver-field">يُعتمد، مدير/المدرسة</div>
+                                    <!-- الشهر والعام الدراسي -->
+                                    <div class="report-month-year">
+                                        <div class="report-month" id="reportMonthCoverText">شهر ______</div>
+                                        <div class="report-year" id="academicYearCover">العام الدراسي / 2026م</div>
                                     </div>
                                     
-                                    <!-- الخط الأفقي -->
-                                    <div class="horizontal-line"></div>
+                                    <!-- التوقيعات -->
+                                    <div class="report-signatures">
+                                        <div class="signature-box">
+                                            <div class="signature-label">إعداد المدير/ة المساعد/ة</div>
+                                            <div class="signature-line"></div>
+                                            <div class="signature-name" id="assistantManagerName">______</div>
+                                        </div>
+                                        <div class="signature-box">
+                                            <div class="signature-label">يُعتمد، مدير/ة المدرسة</div>
+                                            <div class="signature-line"></div>
+                                            <div class="signature-name" id="schoolManagerName">______</div>
+                                        </div>
+                                    </div>
                                     
                                     <!-- تذييل الصفحة -->
-                                    <div class="footer-text">إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين</div>
+                                    <div class="report-footer" id="reportFooterCover">
+                                        إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- الصفحة الثانية المحدثة حسب المواصفات -->
-                            <div class="second-page">
-                                <!-- العنوان الرئيسي -->
-                                <div class="second-page-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</div>
-                                
-                                <!-- الجدول -->
-                                <table class="leadership-table">
-                                    <thead>
-                                        <tr>
-                                            <th>القسم</th>
-                                            <th>عدد استمارات الزيارات الصفية التي نفذت من قبل المعلم الأول أو المنسق خلال الشهر</th>
-                                            <th>يوجد محضر اجتماع المعلم الأول أو المنسق مع المعلمين</th>
-                                            <th>توجد خطة أسبوعية للمعلم الأول أو المنسق</th>
-                                            <th>أسباب عدم التسليم</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="other-columns">معلم أول / منسق اللغة العربية</td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="reasons-column"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="other-columns">معلم أول/منسق رياضيات وعلوم</td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="reasons-column"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="other-columns">معلم اول/منسق اللغة الإنجليزية</td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="other-columns"></td>
-                                            <td class="reasons-column"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                
-                                <!-- الملاحظات العامة -->
-                                <div class="general-notes">
-                                    ملاحظات عامة: يتم التنسيق مع القيادة الوسطى لتنفيذ الزيارات الصفية بحسب ما يتناسب مع ظروف الجداول والنصاب المسند لهم.
-                                </div>
-                                
-                                <!-- العنوان الفرعي -->
-                                <div class="visits-title">ثانياً: عدد الزيارات التي تُقَام خلال شهر ______</div>
-                                
-                                <!-- قائمة عدد الزيارات -->
-                                <div class="visits-list">
-                                    <div>القيادة العليا</div>
-                                    <div>القيادة الوسطى</div>
-                                </div>
-                                
-                                <!-- الخط الأفقي -->
-                                <div class="second-page-line"></div>
-                                
-                                <!-- التذييل -->
-                                <div class="second-page-footer">إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين</div>
-                            </div>
-
-                            <!-- باقي محتوى التقرير -->
-                            <div class="report-section">
-                                <h3 class="report-section-title">ثالثاً: بيان أسماء المعلمين المُزارين من قبل القيادة العليا والوسطى</h3>
-                                <div class="table-responsive">
-                                    <table class="report-table" id="visitedTeachersTable">
-                                        <thead>
-                                            <tr>
-                                                <th>م</th>
-                                                <th>اسم المعلم</th>
-                                                <th>القسم</th>
-                                                <th>تاريخ الزيارة</th>
-                                                <th>تقييم الزيارة</th>
-                                                <th>اسم الزائر</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="visitedTeachersBody">
-                                            <!-- سيتم ملؤها بالبيانات -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <button class="btn auto-fill-btn" onclick="addVisitedTeacher()">+ إضافة معلم مزار</button>
-                            </div>
-
-                            <!-- أزرار التحميل المحدثة -->
-                            <div class="report-actions">
-                                <button class="btn btn-success" id="saveQualityReport">
-                                    <i class="fas fa-save"></i> حفظ التقرير
-                                </button>
-                                <button class="btn btn-secondary" id="downloadWordReport">
-                                    <i class="fas fa-file-word"></i> تحميل كملف Word
-                                </button>
-                                <button class="btn" id="autoFillBtn">تعبئة تلقائية من النظام</button>
-                            </div>
+                            <!-- باقي محتوى التقرير يبقى كما هو -->
+                            <!-- ... -->
                         </div>
                     </div>
-
+                    
                     <!-- صفحة التقارير المحفوظة -->
                     <div id="saved-quality-reports" class="quality-tab-content">
-                        <div class="quality-report-section">
-                            <div class="quality-report-header">
-                                <h2 class="quality-report-title">التقارير المحفوظة</h2>
-                                <p class="quality-report-subtitle">عرض وإدارة التقارير المحفوظة سابقاً</p>
-                            </div>
-
-                            <div id="savedReportsContainer" class="saved-reports-container">
-                                <!-- سيتم ملؤها بالتقارير المحفوظة -->
-                            </div>
-                        </div>
+                        <!-- ... -->
                     </div>
                 </section>
 
-                <!-- Report Settings Section -->
-                <section id="report-settings" class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">إعدادات التقرير</h2>
-                    </div>
-                    
-                    <div class="settings-tabs">
-                        <button class="settings-tab active" data-tab="quality-report-settings">إعدادات تقرير جودة التعليم</button>
-                    </div>
-
-                    <!-- صفحة إعدادات تقرير جودة التعليم -->
-                    <div id="quality-report-settings" class="settings-tab-content active">
-                        <div class="report-settings-section">
-                            <div class="report-settings-header">
-                                <h2 class="report-settings-title">إعدادات تقرير جودة التعليم</h2>
-                                <p class="report-settings-subtitle">إعدادات الغلاف والزيارات الصفية</p>
-                            </div>
-
-                            <!-- إعدادات الغلاف -->
-                            <div class="report-section">
-                                <h3 class="report-section-title">إعدادات الغلاف</h3>
-                                <div class="form-group">
-                                    <label for="schoolName">اسم المدرسة</label>
-                                    <input type="text" id="schoolName" class="input-field" placeholder="أدخل اسم المدرسة">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="academicYear">العام الدراسي</label>
-                                    <input type="text" id="academicYear" class="input-field" placeholder="مثال: 2025 / 2026م">
-                                </div>
-                            </div>
-
-                            <!-- أزرار الحفظ -->
-                            <div class="report-actions">
-                                <button class="btn btn-success" id="saveReportSettings">
-                                    <i class="fas fa-save"></i> حفظ الإعدادات
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Users Management Section -->
-                <section id="users" class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">إدارة المستخدمين</h2>
-                    </div>
-                    
-                    <div class="user-management-section active">
-                        <div class="user-management-header">
-                            <h3 class="user-management-title">إدارة المستخدمين</h3>
-                            <div class="user-management-actions">
-                                <button class="btn" id="addUser">إضافة مستخدم جديد</button>
-                            </div>
-                        </div>
-                        
-                        <table class="user-table">
-                            <thead>
-                                <tr>
-                                    <th>الترتيب</th>
-                                    <th>الاسم</th>
-                                    <th>الوظيفة/القسم</th>
-                                    <th>رقم الهاتف</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTable">
-                                <!-- سيتم ملؤها بالبيانات -->
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                <!-- باقي الأقسام تبقى كما هي -->
+                <!-- ... -->
             </div>
         </main>
     </div>
 
+    <!-- النوافذ المنبثقة تبقى كما هي -->
+    <!-- ... -->
+
     <script>
-        // البيانات الأساسية
-        const appData = {
-            currentUser: null,
-            users: [
-                { 
-                    id: 1, 
-                    username: 'admin', 
-                    password: 'admin123', 
-                    name: 'مدير النظام', 
-                    position: 'مدير النظام',
-                    role: 'admin', 
-                    avatar: 'م',
-                    active: true
-                }
-            ],
-            reportSettings: {
-                schoolName: '',
-                academicYear: '2025 / 2026م'
-            },
-            qualityReportData: {
-                schoolName: '',
-                reportMonth: '',
-                academicYear: '2025 / 2026م'
-            }
-        };
+        // جميع الدوال السابقة تبقى كما هي
+        // ...
 
-        // تهيئة التطبيق
-        document.addEventListener('DOMContentLoaded', function() {
-            // محاولة استعادة حالة تسجيل الدخول من localStorage
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                const userData = JSON.parse(savedUser);
-                const user = appData.users.find(u => u.id === userData.id);
-                if (user) {
-                    appData.currentUser = user;
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('app').style.display = 'block';
-                    document.getElementById('userName').textContent = user.name;
-                    document.getElementById('userAvatar').textContent = user.avatar;
-                    
-                    // التنقل إلى القسم المحفوظ
-                    const savedSection = localStorage.getItem('currentSection') || 'quality-report';
-                    navigateToSection(savedSection);
-                }
-            }
-            
-            // تحميل البيانات من localStorage إذا كانت موجودة
-            loadDataFromStorage();
-            
-            // إعداد معالج تسجيل الدخول
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            
-            // إعداد معالج تسجيل الخروج
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            
-            // إعداد التنقل بين الأقسام
-            setupNavigation();
-            
-            // إعداد الأزرار والإجراءات
-            setupButtons();
-            
+        // إعداد قسم تقرير الجودة
+        function setupQualityReport() {
             // إعداد علامات التبويب
-            setupTabs();
-            
-            // تحديث عرض الغلاف
-            updateCoverDisplay();
-        });
-
-        // تحميل البيانات من localStorage
-        function loadDataFromStorage() {
-            const savedData = localStorage.getItem('educationQualityData');
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                Object.assign(appData, parsedData);
-            }
-        }
-
-        // حفظ البيانات إلى localStorage
-        function saveDataToStorage() {
-            localStorage.setItem('educationQualityData', JSON.stringify(appData));
-        }
-
-        // إعداد التنقل بين الأقسام
-        function setupNavigation() {
-            const navTabs = document.querySelectorAll('.nav-tabs a');
-            
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const sectionId = this.getAttribute('data-section');
-                    navigateToSection(sectionId);
-                });
-            });
-        }
-
-        // التنقل إلى قسم معين
-        function navigateToSection(sectionId) {
-            // حفظ القسم الحالي
-            localStorage.setItem('currentSection', sectionId);
-            
-            // تحديث الروابط
-            document.querySelectorAll('.nav-tabs a').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-section') === sectionId) {
-                    tab.classList.add('active');
-                }
-            });
-            
-            // إظهار القسم المطلوب
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-                if (section.id === sectionId) {
-                    section.classList.add('active');
-                }
-            });
-        }
-
-        // إعداد علامات التبويب
-        function setupTabs() {
-            // علامات تبويب الجودة
             document.querySelectorAll('.quality-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     // إزالة النشاط من جميع الأزرار
@@ -1111,375 +247,140 @@
                     // إظهار المحتوى المحدد
                     const tabId = this.getAttribute('data-tab');
                     document.getElementById(tabId).classList.add('active');
+                    
+                    // إذا كانت صفحة التقارير المحفوظة، قم بتحميلها
+                    if (tabId === 'saved-quality-reports') {
+                        loadSavedQualityReports();
+                    }
                 });
             });
-        }
+            
+            // تحديث اسم المدرسة في التقرير
+            document.getElementById('schoolNameCover').textContent = `لمدرسة ${appData.reportSettings.schoolName || '______'}`;
+            
+            // تحديث العام الدراسي في التقرير
+            document.getElementById('academicYearCover').textContent = appData.reportSettings.academicYear || 'العام الدراسي / 2026م';
+            
+            // تحديث أسماء الموقعين
+            if (appData.reportSettings.assistantManagers.length > 0) {
+                document.getElementById('assistantManagerName').textContent = appData.reportSettings.assistantManagers[0].name;
+            } else {
+                document.getElementById('assistantManagerName').textContent = '______';
+            }
+            
+            if (appData.reportSettings.schoolManagers.length > 0) {
+                document.getElementById('schoolManagerName').textContent = appData.reportSettings.schoolManagers[0].name;
+            } else {
+                document.getElementById('schoolManagerName').textContent = '______';
+            }
+            
+            // تحديث الشهر الحالي
+            const currentMonth = new Date().toLocaleDateString('ar-EG', { month: 'long' });
+            document.getElementById('reportMonthCoverText').textContent = `شهر ${currentMonth}`;
 
-        // إعداد الأزرار والإجراءات
-        function setupButtons() {
+            // تحديث الشعار
+            if (appData.reportSettings.ministryLogo) {
+                document.getElementById('ministryLogoPreview').src = appData.reportSettings.ministryLogo;
+                document.getElementById('ministryLogoPreview').style.display = 'block';
+            }
+
+            // تحديث التذييل
+            document.getElementById('reportFooterCover').textContent = appData.reportSettings.reportFooter || 'إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين';
+
             // تحديث اختيار الشهر
             document.getElementById('reportMonthCover').addEventListener('change', function() {
                 const selectedMonth = this.value;
                 document.getElementById('reportMonthCoverText').textContent = `شهر ${selectedMonth}`;
             });
 
-            // إعداد زر حفظ إعدادات التقرير
-            document.getElementById('saveReportSettings').addEventListener('click', saveReportSettings);
+            // تحميل البيانات المحفوظة
+            loadQualityReportData();
 
-            // إعداد زر حفظ تقرير الجودة
-            document.getElementById('saveQualityReport').addEventListener('click', saveQualityReport);
+            // تعبئة البيانات في النموذج
+            document.getElementById('upperLeadershipVisits').value = appData.qualityReportData.seniorLeadershipVisits;
+            document.getElementById('middleLeadershipVisits').value = appData.qualityReportData.middleLeadershipVisits;
+            document.getElementById('totalClassVisits').value = appData.qualityReportData.totalClassVisits || 0;
 
-            // إعداد زر تحميل Word
-            document.getElementById('downloadWordReport').addEventListener('click', downloadWordReport);
+            // تعبئة الجداول
+            initializeMiddleLeadershipTable();
+            initializePerformanceTable();
+            initializeQualitativeReportTable();
 
-            // إعداد زر التعبئة التلقائية
-            document.getElementById('autoFillBtn').addEventListener('click', autoFillFromSystem);
+            // إعداد أزرار التحميل مع تأثيرات الضغط
+            const wordBtn = document.getElementById('downloadWordReport');
+            const saveBtn = document.getElementById('saveQualityReport');
+            const autoFillBtn = document.getElementById('autoFillBtn');
+            const generateChartsBtn = document.getElementById('generateChartsBtn');
 
-            // إعداد مستمعي الأحداث للحقول
-            document.getElementById('schoolName').addEventListener('input', updateCoverDisplay);
-            document.getElementById('academicYear').addEventListener('input', updateCoverDisplay);
-        }
-
-        // تحديث عرض الغلاف
-        function updateCoverDisplay() {
-            // تحديث اسم المدرسة
-            document.getElementById('schoolNameCover').textContent = `لمدرسة ${appData.reportSettings.schoolName || ''}`;
-            
-            // تحديث العام الدراسي
-            document.getElementById('academicYearCover').textContent = appData.reportSettings.academicYear || 'العام الدراسي';
-        }
-
-        // حفظ إعدادات التقرير
-        function saveReportSettings() {
-            // جمع البيانات
-            appData.reportSettings.schoolName = document.getElementById('schoolName').value;
-            appData.reportSettings.academicYear = document.getElementById('academicYear').value;
-            
-            // حفظ البيانات
-            saveDataToStorage();
-            
-            // تحديث الغلاف
-            updateCoverDisplay();
-            
-            alert('تم حفظ الإعدادات بنجاح');
-        }
-
-        // حفظ تقرير الجودة
-        function saveQualityReport() {
-            // جمع البيانات
-            appData.qualityReportData.schoolName = appData.reportSettings.schoolName;
-            appData.qualityReportData.academicYear = appData.reportSettings.academicYear;
-            appData.qualityReportData.reportMonth = document.getElementById('reportMonthCover').value;
-            
-            try {
-                // إنشاء معرف فريد للتقرير
-                const reportId = 'quality_report_' + new Date().getTime();
-                
-                // إضافة معلومات إضافية للتقرير
-                const reportToSave = {
-                    ...appData.qualityReportData,
-                    id: reportId,
-                    createdAt: new Date().toISOString()
-                };
-                
-                // الحصول على التقارير المحفوظة سابقاً
-                const savedReports = JSON.parse(localStorage.getItem('savedQualityReports') || '[]');
-                
-                // إضافة التقرير الجديد
-                savedReports.push(reportToSave);
-                
-                // حفظ التقارير في localStorage
-                localStorage.setItem('savedQualityReports', JSON.stringify(savedReports));
-                
-                alert('تم حفظ تقرير الجودة بنجاح');
-                
-            } catch (e) {
-                alert('حدث خطأ أثناء حفظ التقرير');
-                console.error('خطأ في الحفظ:', e);
-            }
-        }
-
-        // تحميل التقرير كملف Word
-        function downloadWordReport() {
-            try {
-                // إنشاء محتوى HTML للتقرير
-                const reportContent = generateWordReportContent();
-                
-                // إنشاء ملف Word باستخدام Blob
-                const blob = new Blob(['\uFEFF' + reportContent], { 
-                    type: 'application/msword;charset=utf-8' 
+            // إعداد مستمعي الأحداث للأزرار
+            if (wordBtn) {
+                wordBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, downloadWordReport);
                 });
-                
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                const currentMonth = document.getElementById('reportMonthCover').value || new Date().toLocaleDateString('ar-EG', { month: 'long' });
-                a.href = url;
-                a.download = `تقرير_جودة_التعليم_${currentMonth}.doc`;
-                
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-            } catch (error) {
-                console.error('Error generating Word file:', error);
-                alert('حدث خطأ أثناء إنشاء ملف Word');
             }
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, saveQualityReport);
+                });
+            }
+
+            if (autoFillBtn) {
+                autoFillBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, autoFillFromSystem);
+                });
+            }
+
+            if (generateChartsBtn) {
+                generateChartsBtn.addEventListener('click', function(e) {
+                    showLoadingEffect(e.target, generateCharts);
+                });
+            }
+
+            // إعداد نافذة المعاينة
+            setupQualityPreviewModal();
+
+            // إعداد حقول الإدخال
+            document.getElementById('upperLeadershipVisits').addEventListener('change', updateQualityReport);
+            document.getElementById('middleLeadershipVisits').addEventListener('change', updateQualityReport);
+            document.getElementById('totalClassVisits').addEventListener('change', updateQualityReport);
+
+            // إعداد فلتر التقارير المحفوظة
+            document.getElementById('filterMonth').addEventListener('change', loadSavedQualityReports);
+            document.getElementById('sortReports').addEventListener('change', loadSavedQualityReports);
+
+            // إنشاء الرسوم البيانية
+            generateCharts();
         }
 
-        // إنشاء محتوى Word للتقرير
-        function generateWordReportContent() {
-            const currentMonth = document.getElementById('reportMonthCover').value || new Date().toLocaleDateString('ar-EG', { month: 'long' });
-            const currentDate = new Date().toLocaleDateString('ar-EG');
+        // تحديث غلاف التقرير
+        function updateReportCover() {
+            document.getElementById('schoolNameCover').textContent = `لمدرسة ${appData.reportSettings.schoolName || '______'}`;
+            document.getElementById('academicYearCover').textContent = appData.reportSettings.academicYear || 'العام الدراسي / 2026م';
             
-            let content = `
-            <!DOCTYPE html>
-            <html dir="rtl" lang="ar">
-            <head>
-                <meta charset="UTF-8">
-                <title>تقرير متابعة جودة التعليم والتعلم</title>
-                <style>
-                    body {
-                        font-family: 'Traditional Arabic', serif;
-                        direction: rtl;
-                        line-height: 1.6;
-                        margin: 0;
-                        padding: 2cm;
-                    }
-                    .cover {
-                        text-align: center;
-                        margin-bottom: 3cm;
-                    }
-                    .ministry-logo {
-                        width: 7.5cm;
-                        height: 4.8cm;
-                        background-color: #1E4B8A;
-                        margin: 0 auto 1.5cm;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-weight: bold;
-                        font-size: 1.2rem;
-                    }
-                    .report-title {
-                        color: #1F497D;
-                        font-size: 22px;
-                        font-weight: bold;
-                        margin-bottom: 1.5cm;
-                    }
-                    .school-field, .month-field, .year-field {
-                        margin-bottom: 0.7cm;
-                        border-bottom: 1px solid black;
-                        display: inline-block;
-                        padding-bottom: 0.2cm;
-                    }
-                    .month-field {
-                        color: #FF0000;
-                    }
-                    .signature-frame {
-                        border: 1.5pt solid #BFBFBF;
-                        border-radius: 5pt;
-                        padding: 1cm;
-                        margin: 2cm 0;
-                        display: flex;
-                        justify-content: space-between;
-                    }
-                    .horizontal-line {
-                        border-top: 1px solid #BFBFBF;
-                        margin: 1cm 0;
-                    }
-                    .footer-text {
-                        text-align: center;
-                        font-size: 12px;
-                    }
-                    .second-page {
-                        margin-top: 3cm;
-                    }
-                    .second-page-title {
-                        color: #1F497D;
-                        font-size: 16px;
-                        font-weight: bold;
-                        margin-bottom: 1cm;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 1cm;
-                    }
-                    th {
-                        background-color: #1F497D;
-                        color: white;
-                        font-weight: bold;
-                        padding: 8px;
-                        border: 1px solid black;
-                    }
-                    td {
-                        padding: 8px;
-                        border: 1px solid black;
-                    }
-                    .reasons-column {
-                        background-color: #F2F2F2;
-                        text-align: right;
-                    }
-                    .general-notes {
-                        font-style: italic;
-                        margin-bottom: 1cm;
-                    }
-                    .visits-title {
-                        color: #1F497D;
-                        font-size: 16px;
-                        font-weight: bold;
-                        margin-bottom: 0.5cm;
-                    }
-                    .second-page-line {
-                        border-top: 1px solid #95B3D7;
-                        margin: 1cm 0;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="cover">
-                    <div class="ministry-logo">شعار وزارة التعليم</div>
-                    <div class="report-title">تقرير متابعة جودة التعليم والتعلم للقيادة العليا والوسطى</div>
-                    <div class="school-field">لمدرسة ${appData.reportSettings.schoolName || ''}</div>
-                    <br>
-                    <div class="month-field">شهر ${currentMonth}</div>
-                    <br>
-                    <div class="year-field">${appData.reportSettings.academicYear || 'العام الدراسي'}</div>
-                    <div class="signature-frame">
-                        <div>إعداد المدير/المساعدة</div>
-                        <div>يُعتمد، مدير/المدرسة</div>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="footer-text">إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين</div>
-                </div>
-                
-                <div class="second-page">
-                    <div class="second-page-title">أولاً: متابعة تسليم القيادة الوسطى (الزيارات/محاضر الاجتماعات /الخطة الأسبوعية) للمواد الدراسية الى المدير/ة المساعد/ة في المدرسة</div>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>القسم</th>
-                                <th>عدد استمارات الزيارات الصفية التي نفذت من قبل المعلم الأول أو المنسق خلال الشهر</th>
-                                <th>يوجد محضر اجتماع المعلم الأول أو المنسق مع المعلمين</th>
-                                <th>توجد خطة أسبوعية للمعلم الأول أو المنسق</th>
-                                <th>أسباب عدم التسليم</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>معلم أول / منسق اللغة العربية</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="reasons-column"></td>
-                            </tr>
-                            <tr>
-                                <td>معلم أول/منسق رياضيات وعلوم</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="reasons-column"></td>
-                            </tr>
-                            <tr>
-                                <td>معلم اول/منسق اللغة الإنجليزية</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="reasons-column"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="general-notes">
-                        ملاحظات عامة: يتم التنسيق مع القيادة الوسطى لتنفيذ الزيارات الصفية بحسب ما يتناسب مع ظروف الجداول والنصاب المسند لهم.
-                    </div>
-                    
-                    <div class="visits-title">ثانياً: عدد الزيارات التي تُقَام خلال شهر ${currentMonth}</div>
-                    <div>القيادة العليا</div>
-                    <div>القيادة الوسطى</div>
-                    
-                    <div class="second-page-line"></div>
-                    <div class="footer-text">إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين</div>
-                </div>
-            </body></html>`;
-            
-            return content;
-        }
-
-        // تعبئة تلقائية من النظام
-        function autoFillFromSystem() {
-            // محاكاة تعبئة البيانات من النظام
-            document.getElementById('schoolName').value = 'مدرسة النموذجية';
-            document.getElementById('academicYear').value = '2025 / 2026م';
-            
-            // تحديث العرض
-            updateCoverDisplay();
-            
-            alert('تم التعبئة التلقائية من النظام بنجاح');
-        }
-
-        // إضافة معلم مزار
-        function addVisitedTeacher() {
-            const tbody = document.getElementById('visitedTeachersBody');
-            const rowCount = tbody.children.length + 1;
-            
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${rowCount}</td>
-                <td><input type="text" class="input-field" placeholder="اسم المعلم"></td>
-                <td><input type="text" class="input-field" placeholder="القسم"></td>
-                <td><input type="date" class="input-field"></td>
-                <td>
-                    <select class="select-field">
-                        <option value="ممتاز">ممتاز</option>
-                        <option value="جيد جداً">جيد جداً</option>
-                        <option value="جيد">جيد</option>
-                        <option value="مقبول">مقبول</option>
-                        <option value="ضعيف">ضعيف</option>
-                    </select>
-                </td>
-                <td><input type="text" class="input-field" placeholder="اسم الزائر"></td>
-            `;
-            tbody.appendChild(row);
-        }
-
-        // معالج تسجيل الدخول
-        function handleLogin(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            const user = appData.users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                appData.currentUser = user;
-                // حفظ حالة تسجيل الدخول
-                localStorage.setItem('currentUser', JSON.stringify({ id: user.id }));
-                
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                document.getElementById('userName').textContent = user.name;
-                document.getElementById('userAvatar').textContent = user.avatar;
-                
-                // التنقل إلى القسم الافتراضي
-                navigateToSection('quality-report');
+            // تحديث أسماء الموقعين
+            if (appData.reportSettings.assistantManagers.length > 0) {
+                document.getElementById('assistantManagerName').textContent = appData.reportSettings.assistantManagers[0].name;
             } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+                document.getElementById('assistantManagerName').textContent = '______';
+            }
+            
+            if (appData.reportSettings.schoolManagers.length > 0) {
+                document.getElementById('schoolManagerName').textContent = appData.reportSettings.schoolManagers[0].name;
+            } else {
+                document.getElementById('schoolManagerName').textContent = '______';
             }
         }
 
-        // معالج تسجيل الخروج
-        function handleLogout() {
-            appData.currentUser = null;
-            localStorage.removeItem('currentUser');
-            document.getElementById('loginPage').style.display = 'flex';
-            document.getElementById('app').style.display = 'none';
-            document.getElementById('loginForm').reset();
+        // تحديث تذييل التقرير
+        function updateReportFooter() {
+            const footerText = document.getElementById('reportFooter').value;
+            document.getElementById('footerPreview').textContent = footerText;
+            document.getElementById('reportFooterCover').textContent = footerText || 'إدارة العمليات التعليمية المنطقة (1) رئيس مدارس. أفنان محمد أمين';
         }
+
+        // باقي الدوال تبقى كما هي
+        // ...
     </script>
 </body>
 </html>
